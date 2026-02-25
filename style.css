@@ -461,29 +461,25 @@ footer p { font-size:10px; letter-spacing:0.1em; color:var(--muted); }
     transition: transform 0.05s linear;
 }
 .bot-mouth {
-    width: 10px; height: 4px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--accent-green));
-    border-radius: 4px;
-    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 0 5px rgba(74, 158, 255, 0.4);
+    width: 12px; height: 5px;
+    border-radius: 0 0 12px 12px;
+    background: transparent;
+    border: 2px solid var(--accent-gold); /* distinct gold smile */
+    border-top: 0;
+    box-shadow: 0 2px 4px rgba(201, 168, 76, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 2px;
 }
+
 .tech-bot-container:hover .bot-mouth {
-    width: 14px; height: 8px;
+    width: 16px; height: 9px;
     border-radius: 2px 2px 14px 14px;
     background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--accent-green));
     border: none;
     box-shadow: 0 2px 6px rgba(201, 168, 76, 0.5);
+    transform: translateY(-1px);
 }
-.bot-mouth.wow {
-    width: 12px !important;
-    height: 16px !important;
-    border-radius: 50% !important;
-    background: linear-gradient(#0D0D0F, #0D0D0F) padding-box,
-    linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--accent-green)) border-box !important;
-    border: 2px solid transparent !important;
-    box-shadow: 0 0 8px rgba(62, 207, 142, 0.5) !important;
-    transform: translateY(1px);
-}
+
 
 /* terminal styles */
 #terminal {

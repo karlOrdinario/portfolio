@@ -39,17 +39,14 @@ new IntersectionObserver(entries=>{
 },{threshold:0.4}).observe(s));
 
 
-// tech bot eye tracking and expression logic
+// tech bot eye tracking logic
 const botPupils = document.querySelectorAll('.visor-pupil');
-const botMouth = document.querySelector('.bot-mouth');
 const botContainer = document.querySelector('.tech-bot-container');
 
 if (window.matchMedia("(pointer: fine)").matches) {
     document.addEventListener('mousemove', (e) => {
         const mouseX = e.clientX;
         const mouseY = e.clientY;
-
-        let totalDistance = 0;
 
         botPupils.forEach(pupil => {
             const eye = pupil.parentElement;
@@ -61,8 +58,6 @@ if (window.matchMedia("(pointer: fine)").matches) {
             const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
             const distToMouse = Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY);
 
-            totalDistance += distToMouse;
-
             const maxDistance = 2.5;
             const distance = Math.min(maxDistance, distToMouse / 10);
 
@@ -71,16 +66,6 @@ if (window.matchMedia("(pointer: fine)").matches) {
 
             pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
         });
-
-        const avgDistance = totalDistance / botPupils.length;
-
-        if (botMouth) {
-            if (avgDistance > 250) {
-                botMouth.classList.add('wow');
-            } else {
-                botMouth.classList.remove('wow');
-            }
-        }
     });
 }
 
