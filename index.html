@@ -22,7 +22,23 @@
         <li><a href="#work-with-me">Work With Me</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
+    <ul class="mobile-nav-links">
+        <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+        <li><a href="#skills" onclick="closeMobileMenu()">Skills</a></li>
+        <li><a href="#projects" onclick="closeMobileMenu()">Projects</a></li>
+        <li><a href="#experience" onclick="closeMobileMenu()">Experience</a></li>
+        <li><a href="#work-with-me" onclick="closeMobileMenu()">Work With Me</a></li>
+        <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+    </ul>
+</div>
 
 <section id="userProfile">
     <div class="userProfile-grid-bg"></div>
@@ -40,7 +56,7 @@
             </div>
         </div>
 
-        <div class="userProfile-tag">Available for opportunities · DLSU Computer Science</div>
+        <div class="userProfile-tag">Open to Internships · Graduating Oct 2026 · DLSU CS</div>
         <h1 class="userProfile-name">Karl Andrei<br /><span class="accent">Ordinario</span></h1>
         <p class="userProfile-sub">Software Engineer & Developer</p>
         <p class="userProfile-desc">
@@ -86,7 +102,7 @@
                 corporate partnerships, building relations databases, and overseeing organizational development.
             </p>
             <div class="about-stats">
-                <div class="stat-box"><span class="stat-num">5+</span><span class="stat-label">Full-Stack Projects</span></div>
+                <div class="stat-box"><span class="stat-num">10+</span><span class="stat-label">Projects Built</span></div>
                 <div class="stat-box"><span class="stat-num">10+</span><span class="stat-label">Languages & Tools</span></div>
                 <div class="stat-box"><span class="stat-num">6+</span><span class="stat-label">Organizations</span></div>
                 <div class="stat-box"><span class="stat-num">₱300K+</span><span class="stat-label">Partnerships Secured</span></div>
@@ -100,6 +116,7 @@
             <div class="info-row"><span class="label">Email</span><span class="value"><a href="mailto:karlandreiordinario@gmail.com">karlandreiordinario@gmail.com</a></span></div>
             <div class="info-row"><span class="label">Phone</span><span class="value">+63 919 004 2377</span></div>
             <div class="info-row"><span class="label">LinkedIn</span><span class="value"><a href="https://www.linkedin.com/in/karlordinario/" target="_blank">karlordinario ↗</a></span></div>
+            <div class="info-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/karlOrdinario" target="_blank">karlOrdinario ↗</a></span></div>
             <div class="info-row"><span class="label">Status</span><span class="value" style="color:var(--accent-green)">● Open to Opportunities</span></div>
         </div>
     </div>
@@ -376,13 +393,13 @@
     <div class="wwm-inner">
         <div class="wwm-left reveal">
             <span class="eyebrow">The next chapter</span>
-            <h3 class="wwm-headline">Will you be<br/>the <span class="hl">one?</span></h3>
+            <h3 class="wwm-headline">Here's what I<br/>bring to your <span class="hl">team.</span></h3>
             <p class="wwm-sub">
-                I'm currently seeking internships and full-time roles in software engineering,
-                data, and product development. I bring both the technical depth and the leadership
-                experience to make an immediate impact on your team.
+                Full-stack engineering. Data pipelines. Machine learning. Leadership experience
+                across six organizations. I don't just write code — I own the outcomes.
                 <br /><br />
-                If you're building something meaningful — let's talk.
+                Whether you need someone to ship features, build systems from scratch, or
+                grow alongside your team — I'm ready now. Let's talk.
             </p>
             <a href="#contact" class="wwm-cta">Let's Connect →</a>
         </div>
@@ -421,6 +438,7 @@
     </a>
     <div class="contact-links reveal">
         <a href="https://www.linkedin.com/in/karlordinario/" target="_blank" class="contact-link">LinkedIn</a>
+        <a href="https://github.com/karlOrdinario" target="_blank" class="contact-link">GitHub</a>
         <a href="tel:+639190042377" class="contact-link">+63 919 004 2377</a>
     </div>
 </section>
@@ -429,7 +447,7 @@
     <p style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;">
         <span style="background:linear-gradient(135deg,#4A9EFF,#C9A84C,#3ECF8E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KO</span><span style="color:#C9A84C;">.</span>
     </p>
-    <p>© <script>document.write(new Date().getFullYear())</script> Karl Andrei Ordinario · Manila, Philippines</p>
+    <p>© <span id="footer-year"></span> Karl Andrei Ordinario · Manila, Philippines</p>
     <p>Built with vanilla HTML / CSS / JS</p>
 </footer>
 
@@ -441,12 +459,12 @@
         <span class="title">ko@portfolio ~</span>
     </div>
     <div class="terminal-body" id="term-body">
-        <p>Welcome to KO OS v1.0.0</p>
-        <p>Type <span style="color:var(--white)">'help'</span> for a list of commands.</p>
+        <p>Welcome to <span style="color:var(--accent-green)">KO.</span> portfolio terminal.</p>
+        <p>Type <span style="color:var(--white)">'help'</span> to see available commands.</p>
         <div id="term-output"></div>
         <div class="term-input-line">
             <span class="prompt">ko@portfolio:~$</span>
-            <input type="text" id="term-input" autocomplete="off" spellcheck="false" />
+            <input type="text" id="term-input" autocomplete="off" spellcheck="false" placeholder="type a command..." />
         </div>
     </div>
 </div>
