@@ -1,556 +1,670 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Karl Andrei Ordinario — Data Analyst & Software Engineer</title>
+
+    <!-- Apply the saved theme before first paint -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('ko-theme');
+                if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+            } catch (e) {}
+            document.documentElement.classList.add('js');
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:ital,wght@0,400..700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
 
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1113'/%3E%3Ctext x='8' y='43' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='28' fill='%23EEF0F1'%3EKO%3C/text%3E%3Ccircle cx='54' cy='40' r='4' fill='%23FF6A3A'/%3E%3C/svg%3E" />
+    <link rel="canonical" href="https://karlordinario.vercel.app/" />
+    <meta name="theme-color" content="#0F1113" />
+
     <meta name="title" content="Karl Andrei Ordinario — Data Analyst & Software Engineer" />
-    <meta name="description" content="Portfolio of Karl Andrei Ordinario, a Data Analyst & Software Engineer studying BS Computer Science at De La Salle University, formerly a Shopper Insights Analytics Intern at Nestlé Philippines. Focused on data analytics, data engineering, AI/ML, and quantitative finance — still open to software engineering." />
-    <meta name="keywords" content="Karl Andrei Ordinario, Karl, Karl Andrei, Karl Ordinario, Data Analyst, Data Analytics, Data Engineering, Quantitative Finance, Software Engineer, DLSU, Computer Science, Full-stack Developer, Manila, Nestlé, FMCG, Power BI, Python, Java, SQL, Machine Learning, Artificial Intelligence, Web Development" />
+    <meta name="description" content="Portfolio of Karl Andrei Ordinario: final-year BS Computer Science student at De La Salle University and former Shopper Insights Analytics Intern at Nestlé Philippines. Commercial analytics, quantitative finance, AI and cloud projects." />
+    <meta name="keywords" content="Karl Andrei Ordinario, Karl Ordinario, Data Analyst, Data Analytics, Quantitative Finance, Monte Carlo, Portfolio Optimization, Software Engineer, DLSU, De La Salle University, Computer Science, Makati, Manila, Nestlé, FMCG, Power BI, Python, SQL, AWS, Machine Learning, RAG" />
     <meta name="author" content="Karl Andrei Ordinario" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://karlordinario.vercel.app/" />
     <meta property="og:title" content="Karl Andrei Ordinario — Data Analyst & Software Engineer" />
-    <meta property="og:description" content="4th year BS Computer Science student and Shopper Insights Analytics Intern at Nestlé Philippines, building data platforms, full-stack applications, and intelligent systems. Actively exploring data analytics, engineering, AI/ML, and quant roles." />
+    <meta property="og:description" content="Final-year Computer Science student at De La Salle University and former Shopper Insights Analytics Intern at Nestlé Philippines. Commercial analytics, quantitative finance, AI and cloud projects." />
     <meta property="og:image" content="https://karlordinario.vercel.app/banner630.png" />
 
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://karlordinario.vercel.app/" />
-    <meta property="twitter:title" content="Karl Andrei Ordinario — Data Analyst & Software Engineer" />
-    <meta property="twitter:description" content="4th year BS Computer Science student and Shopper Insights Analytics Intern at Nestlé Philippines, building data platforms, full-stack applications, and intelligent systems. Actively exploring data analytics, engineering, AI/ML, and quant roles." />
-    <meta property="twitter:image" content="https://karlordinario.vercel.app/banner630.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://karlordinario.vercel.app/" />
+    <meta name="twitter:title" content="Karl Andrei Ordinario — Data Analyst & Software Engineer" />
+    <meta name="twitter:description" content="Final-year Computer Science student at De La Salle University and former Shopper Insights Analytics Intern at Nestlé Philippines. Commercial analytics, quantitative finance, AI and cloud projects." />
+    <meta name="twitter:image" content="https://karlordinario.vercel.app/banner630.png" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Karl Andrei Ordinario",
+        "url": "https://karlordinario.vercel.app/",
+        "jobTitle": "Data Analyst & Software Engineer",
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "De La Salle University" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Makati", "addressCountry": "PH" },
+        "sameAs": ["https://www.linkedin.com/in/karlordinario/", "https://github.com/karlOrdinario"]
+    }
+    </script>
 </head>
 <body>
 
-<!-- ═══ PRELOADER ═══ -->
-<div id="preloader">
-    <div class="preloader-inner">
-        <div class="preloader-name">
-            <span class="pl-word">KARL</span>
-            <span class="pl-word pl-accent">ORDINARIO</span>
-        </div>
-        <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
-        <div class="preloader-pct"><span id="preloaderPct">0</span>%</div>
-    </div>
-</div>
-
-<!-- ═══ AMBIENT LAYERS ═══ -->
-<div class="grain"></div>
-<div class="scroll-progress" id="scrollProgress"></div>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ═══ EASTER EGG LAYERS ═══ -->
-<div id="breakMode" class="break-mode" aria-hidden="true">
+<div id="breakMode" class="break-mode" role="dialog" aria-modal="true" aria-labelledby="breakTitle" hidden>
     <div class="break-banner">
-        <span class="break-kicker">🍫 easter egg unlocked</span>
-        <h2 class="break-title">Have a break.</h2>
-        <p class="break-sub">You found the Nestlé egg — a tribute to my internship at Nestlé Philippines,
-            where I turned Kantar, Nielsen & PSA data into shopper insights.</p>
-        <button class="break-close" onclick="endBreakMode()">back to work →</button>
+        <p class="break-kicker">🍫 Easter egg unlocked</p>
+        <h2 class="break-title" id="breakTitle">Have a break.</h2>
+        <p class="break-sub">You found the Nestlé egg, a tribute to my internship at Nestlé Philippines,
+            where I turned Kantar, Nielsen and PSA data into shopper insights.</p>
+        <button type="button" class="break-close" id="breakClose">Back to work</button>
     </div>
 </div>
 <div id="confettiLayer" aria-hidden="true"></div>
-<div id="toast" class="toast" aria-live="polite"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<!-- ═══ NAV ═══ -->
-<nav id="nav">
-    <a href="#hero" class="nav-logo" id="navLogo"><span class="ko">KO</span><span class="dot">.</span></a>
-    <ul class="nav-links">
-        <li><a href="#about"><span class="nl-num">01</span>About</a></li>
-        <li><a href="#skills"><span class="nl-num">02</span>Skills</a></li>
-        <li><a href="#projects"><span class="nl-num">03</span>Projects</a></li>
-        <li><a href="#experience"><span class="nl-num">04</span>Experience</a></li>
-        <li><a href="#work-with-me"><span class="nl-num">05</span>Work With Me</a></li>
-        <li><a href="#contact" class="nav-contact-pill">Contact</a></li>
-    </ul>
-    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
-        <span></span><span></span><span></span>
-    </button>
-</nav>
+<!-- ═══ HEADER ═══ -->
+<header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+        <a href="#top" class="logo" id="navLogo" aria-label="Karl Ordinario, back to top">KO<span class="logo-dot">.</span></a>
 
-<div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
-    <ul class="mobile-nav-links">
-        <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
-        <li><a href="#skills" onclick="closeMobileMenu()">Skills</a></li>
-        <li><a href="#projects" onclick="closeMobileMenu()">Projects</a></li>
-        <li><a href="#experience" onclick="closeMobileMenu()">Experience</a></li>
-        <li><a href="#work-with-me" onclick="closeMobileMenu()">Work With Me</a></li>
-        <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
-    </ul>
-    <div class="mobile-menu-foot">karlandreiordinario@gmail.com</div>
+        <nav class="nav" aria-label="Primary">
+            <ul>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+            <button type="button" class="icon-btn" id="themeToggle" aria-label="Switch to light theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+            </button>
+            <a class="btn btn-outline btn-small header-resume" href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" rel="noopener">Resume<span class="sr-only"> (opens in a new tab)</span></a>
+            <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+                <span class="menu-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" hidden>
+    <nav aria-label="Mobile">
+        <ul>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" rel="noopener">Resume<span class="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+    </nav>
+    <p class="mobile-menu-foot"><a href="mailto:karlandreiordinario@gmail.com">karlandreiordinario@gmail.com</a></p>
 </div>
 
+<main id="main">
+
 <!-- ═══ HERO ═══ -->
-<section id="hero">
-    <div class="hero-grid-bg"></div>
-    <div class="hero-orb orb-a"></div>
-    <div class="hero-orb orb-b"></div>
-
-    <div class="hero-content">
-        <div class="hero-tag">
-            <span class="tag-pulse"></span>
-            <span id="heroGreeting">Nestlé PH Intern thru Aug 2026 · DLSU CS · Manila</span>
+<section class="hero" id="top">
+    <div class="wrap hero-grid">
+        <div class="hero-copy">
+            <p class="hero-status"><span class="status-dot" aria-hidden="true"></span><span id="heroGreeting">Open to analyst, finance and engineering roles. Graduating February 2027.</span></p>
+            <h1 class="hero-name">Karl Andrei Ordinario</h1>
+            <p class="hero-lead">Data analyst and software engineer. I work on commercial analytics, quantitative finance and the software underneath them.</p>
+            <p class="hero-desc">
+                I'm a final-year Computer Science student at De La Salle University. In 2026 I spent five months on the
+                Shopper Insights team at Nestlé Philippines, where I built a national pricing business case and presented
+                to seven sales and brand teams. On my own time I build finance tools that check their own math.
+            </p>
+            <div class="hero-cta">
+                <a href="#work" class="btn btn-primary">See my work</a>
+                <a href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" rel="noopener" class="btn btn-outline">Open resume<span class="sr-only"> (opens in a new tab)</span></a>
+                <a href="mailto:karlandreiordinario@gmail.com" class="btn btn-text">Email me</a>
+            </div>
+            <p class="hero-hint">
+                <span class="hint-keys">psst: press <kbd>`</kbd> for the terminal, or try typing <span class="hint-word">nestle</span></span>
+                <span class="hint-touch">psst: tap <kbd>&gt;_</kbd> for the terminal, then type <span class="hint-word">nestle</span></span>
+            </p>
         </div>
 
-        <h1 class="hero-name" aria-label="Karl Andrei Ordinario">
-            <span class="hero-line"><span class="hero-word" data-word>KARL</span> <span class="hero-word" data-word>ANDREI</span></span>
-            <span class="hero-line"><span class="hero-word hero-accent" data-word>ORDINARIO</span></span>
-        </h1>
-
-        <div class="hero-role">
-            <span class="role-prefix">is a</span>
-            <span class="role-scramble" id="roleScramble">Data Analyst</span>
-        </div>
-
-        <p class="hero-desc">
-            4th year BS Computer Science student specializing in Software Technology at
-            <span class="dlsu">De La Salle University</span>.
-            Currently a Shopper Insights Analytics Intern at <strong>Nestlé Philippines</strong> (Apr–Aug 2026),
-            turning multi-source retail and market data into commercial insight — while building
-            full-stack systems and ML models on the side. Open to what's next starting September.
-        </p>
-
-        <div class="hero-cta">
-            <a href="#projects" class="btn btn-primary" data-magnetic><span>View Projects</span><span class="btn-arrow">↓</span></a>
-            <a href="#contact" class="btn btn-ghost" data-magnetic><span>Get in Touch</span></a>
-            <a href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" class="btn btn-resume" data-magnetic><span>Resume</span><span class="btn-arrow">↗</span></a>
-        </div>
-
-        <div class="hero-hint">psst — press <kbd>`</kbd> for the terminal · try typing <span class="hint-word">nestle</span></div>
-    </div>
-
-    <div class="hero-scroll">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
+        <figure class="sim" aria-labelledby="simTitle">
+            <div class="sim-head">
+                <h2 class="sim-title" id="simTitle">Pricing a call option by simulation</h2>
+                <button type="button" class="btn btn-outline btn-small" id="simRerun">Run again</button>
+            </div>
+            <div class="sim-plot">
+                <canvas id="simCanvas" role="img" aria-label="Chart of simulated price paths over one year, with the median path and the range that holds 90 percent of paths"></canvas>
+                <div class="sim-axis" aria-hidden="true"><span>Today</span><span>6 months</span><span>1 year</span></div>
+            </div>
+            <dl class="sim-readout" aria-live="polite">
+                <div><dt>Monte Carlo</dt><dd id="simMc">…</dd></div>
+                <div><dt>Black–Scholes, exact</dt><dd id="simBs">…</dd></div>
+            </dl>
+            <p class="sim-verdict" id="simVerdict">Simulating…</p>
+            <figcaption>
+                Your browser just simulated 2,000 price paths for a one-year call option (strike 100, volatility 20%, rate 5%)
+                and compared the answer with the exact formula. My <a href="#mcquant">mcquant</a> engine runs this check on every price it produces.
+            </figcaption>
+        </figure>
     </div>
 </section>
 
-<!-- ═══ MARQUEE ═══ -->
-<div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marqueeTrack">
-        <span>Data Analytics</span><em>✦</em><span>Python</span><em>✦</em><span>Power BI</span><em>✦</em>
-        <span>Machine Learning</span><em>✦</em><span>SQL</span><em>✦</em><span>Full-Stack</span><em>✦</em>
-        <span>Java</span><em>✦</em><span>Shopper Insights</span><em>✦</em><span>React</span><em>✦</em>
-        <span>Quant Finance</span><em>✦</em><span>Spring Boot</span><em>✦</em><span>Data Engineering</span><em>✦</em>
-    </div>
-</div>
+<!-- ═══ WORK ═══ -->
+<section class="section" id="work">
+    <span id="projects" class="anchor-alias"></span>
+    <div class="wrap section-grid">
+        <header class="section-head">
+            <h2>Work</h2>
+            <p>Four projects I'd walk you through first, then everything else.</p>
+        </header>
 
-<!-- ═══ ABOUT ═══ -->
-<section id="about">
-    <div class="section-header reveal">
-        <span class="section-num">01</span>
-        <h2 class="section-title" data-split>About</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="about-grid">
-        <div class="about-text reveal">
-            <p class="about-lede"><em>“I don't just crunch numbers or write code — I own the outcomes.”</em></p>
-            <p>
-                I'm <strong>Karl</strong>, a data analyst and software engineer based in <strong>Manila, Philippines</strong>,
-                currently finishing my BS in Computer Science (Major in Software Technology) at
-                <strong class="dlsu-tag">De La Salle University</strong>, expected to graduate in February 2027.
-            </p>
-            <p>
-                I'm currently a Shopper Insights Analytics Intern at <strong>Nestlé Philippines</strong> (April–August 2026),
-                synthesizing multi-source market intelligence — Kantar, Nielsen, PSA — into insights that shape sales
-                and marketing decisions for one of the world's largest FMCG companies. My technical work spans data
-                analytics, full-stack development, and machine learning, from leading a scorecard migration to
-                Power BI to building ACID-compliant inventory systems.
-            </p>
-            <p>
-                Beyond data and code, I've held leadership roles across multiple university organizations — managing
-                corporate partnerships, building relations databases, and overseeing organizational development.
-            </p>
-            <div class="about-stats">
-                <div class="stat-box reveal"><span class="stat-num" data-count="10" data-suffix="+">0</span><span class="stat-label">Projects Built</span></div>
-                <div class="stat-box reveal"><span class="stat-num" data-count="10" data-suffix="+">0</span><span class="stat-label">Languages & Tools</span></div>
-                <div class="stat-box reveal"><span class="stat-num" data-count="60" data-suffix="+">0</span><span class="stat-label">Retail Outlets Analyzed</span></div>
-                <div class="stat-box reveal"><span class="stat-num" data-count="300" data-prefix="₱" data-suffix="K+">0</span><span class="stat-label">Partnerships Secured</span></div>
+        <div class="section-body">
+
+            <!-- mcquant -->
+            <article class="feature" id="mcquant">
+                <div class="feature-text">
+                    <p class="feature-context">Personal project, 2026</p>
+                    <h3>mcquant: a Monte Carlo engine that checks its own answers</h3>
+                    <p>
+                        A Python library that prices options, measures portfolio risk and values companies by simulation.
+                        Every Monte Carlo price in the test suite is compared against an independent exact formula,
+                        binomial tree or characteristic-function integral, and must land within four standard errors.
+                    </p>
+                    <ul class="feature-points">
+                        <li><strong>33,700× variance reduction</strong> on an arithmetic Asian call by combining randomised Sobol quasi-Monte Carlo with a control variate.</li>
+                        <li><strong>13 of 13 validation benchmarks pass</strong>, backed by 299 tests at 98% coverage and CI on GitHub Actions.</li>
+                        <li><strong>A full valuation of Monde Nissin</strong> (PSE: MONDE) from public filings: DCF, 50,000-run Monte Carlo DCF, trading comps and a live Excel model.</li>
+                    </ul>
+                    <p class="stack">Python, NumPy, SciPy, pandas, Streamlit, pytest, Hypothesis, GitHub Actions</p>
+                    <a class="link-ext" href="https://github.com/karlOrdinario/mcquant" target="_blank" rel="noopener">View mcquant on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                </div>
+
+                <figure class="evidence">
+                    <figcaption class="evidence-title">Monde Nissin value per share, by method</figcaption>
+                    <div class="ff" role="img" aria-label="Football field chart. DCF Monte Carlo: 7.23 to 11.37 pesos. DCF sensitivity: 8.18 to 12.29. Trading comps on EV to EBITDA: 6.52 to 9.63. Trading comps on P/E: 5.81 to 8.91. Analyst price targets: 5.35 to 12.30. 52-week trading range: 5.61 to 7.46. Market price: 6.40.">
+                        <div class="ff-row ff-row-key" style="--lo:7.23; --hi:11.37; --mid:9.02">
+                            <div class="ff-label"><span>DCF Monte Carlo</span><span class="num">₱7.23 – 11.37</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span><span class="ff-mid"></span></div>
+                        </div>
+                        <div class="ff-row" style="--lo:8.18; --hi:12.29; --mid:9.74">
+                            <div class="ff-label"><span>DCF sensitivity</span><span class="num">₱8.18 – 12.29</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span><span class="ff-mid"></span></div>
+                        </div>
+                        <div class="ff-row" style="--lo:6.52; --hi:9.63; --mid:7.86">
+                            <div class="ff-label"><span>Comps, EV/EBITDA</span><span class="num">₱6.52 – 9.63</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span><span class="ff-mid"></span></div>
+                        </div>
+                        <div class="ff-row" style="--lo:5.81; --hi:8.91; --mid:7.30">
+                            <div class="ff-label"><span>Comps, P/E</span><span class="num">₱5.81 – 8.91</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span><span class="ff-mid"></span></div>
+                        </div>
+                        <div class="ff-row" style="--lo:5.35; --hi:12.30; --mid:8.79">
+                            <div class="ff-label"><span>Analyst price targets</span><span class="num">₱5.35 – 12.30</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span><span class="ff-mid"></span></div>
+                        </div>
+                        <div class="ff-row" style="--lo:5.61; --hi:7.46">
+                            <div class="ff-label"><span>52-week trading range</span><span class="num">₱5.61 – 7.46</span></div>
+                            <div class="ff-track"><span class="ff-bar"></span></div>
+                        </div>
+                        <div class="ff-axis" aria-hidden="true">
+                            <div class="ff-axis-scale"><span>₱5</span><span>₱7</span><span>₱9</span><span>₱11</span><span>₱13</span></div>
+                        </div>
+                    </div>
+                    <p class="evidence-note"><span class="ff-legend-line" aria-hidden="true"></span>Market price ₱6.40 on 6 November 2026. A learning project on public information, not investment advice.</p>
+                </figure>
+            </article>
+
+            <!-- Regime-switching -->
+            <article class="feature">
+                <div class="feature-text">
+                    <p class="feature-context">Personal project, 2026</p>
+                    <h3>Regime-switching portfolio model</h3>
+                    <p>
+                        A two-state Hidden Markov Model reads calm and turbulent markets from 16 years of price data,
+                        and the portfolio switches between a maximum-Sharpe allocation and a minimum-volatility one with
+                        equity capped at 30%. Features are lagged a day to avoid look-ahead bias, and the model is
+                        retrained every month in a walk-forward backtest.
+                    </p>
+                    <ul class="feature-points">
+                        <li><strong>Halved maximum drawdown</strong> against a 60/40 benchmark over 164 monthly rebalances, at the cost of a lower return.</li>
+                        <li>Picked out the 2011, 2018, 2020 and 2022 stress periods without being told about them.</li>
+                    </ul>
+                    <p class="stack">Python, hmmlearn, PyPortfolioOpt, scikit-learn, pandas, Yahoo Finance data</p>
+                    <a class="link-ext" href="https://github.com/karlOrdinario/Portfolio-Optimizer" target="_blank" rel="noopener">View the optimizer on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                </div>
+
+                <figure class="evidence">
+                    <figcaption class="evidence-title">Walk-forward backtest, 2013 to 2026</figcaption>
+                    <table class="compare">
+                        <thead>
+                            <tr><th scope="col"><span class="sr-only">Metric</span></th><th scope="col">Regime-switching</th><th scope="col">60/40</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th scope="row">Maximum drawdown</th><td class="is-key">−13.6%</td><td>−27.2%</td></tr>
+                            <tr><th scope="row">Annual volatility</th><td class="is-key">6.3%</td><td>10.5%</td></tr>
+                            <tr><th scope="row">Sharpe ratio</th><td class="is-key">0.98</td><td>0.89</td></tr>
+                            <tr><th scope="row">Annual return</th><td>6.2%</td><td>9.2%</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="evidence-note">SPY, TLT, GLD and SHV, rebalanced monthly. The model was in its turbulent state about 35% of the time.</p>
+                </figure>
+            </article>
+
+            <!-- OLA Checker -->
+            <article class="feature">
+                <div class="feature-text">
+                    <p class="feature-context">Built on my own initiative at Nestlé Philippines, 2026</p>
+                    <h3>Online Availability Checker</h3>
+                    <p>
+                        While visiting another department I noticed someone checking 132 product listings by hand
+                        every day. I built a tool that reads the stock status of 254 listings across Lazada, Shopee and
+                        TikTok Shop and writes an Excel report in which every verdict records its evidence.
+                    </p>
+                    <ul class="feature-points">
+                        <li><strong>Nearly doubled coverage</strong> while finishing a full run of 254 listings in 11 minutes.</li>
+                        <li>Guarded accuracy with a regression test against listings of known status, and wrote a 26-page manual so the team can run it without me. Now in user acceptance testing.</li>
+                    </ul>
+                    <p class="stack">Python, Playwright, openpyxl</p>
+                </div>
+
+                <figure class="evidence">
+                    <figcaption class="evidence-title">Time to check one listing</figcaption>
+                    <div class="bars" role="img" aria-label="Checking one listing took about 28 seconds by hand and 2.6 seconds with the tool.">
+                        <div class="bars-row">
+                            <span class="bars-label">By hand</span>
+                            <span class="bars-track"><span class="bars-fill" style="--w:100%"></span></span>
+                            <span class="bars-value num">28 s</span>
+                        </div>
+                        <div class="bars-row bars-row-key">
+                            <span class="bars-label">With the tool</span>
+                            <span class="bars-track"><span class="bars-fill" style="--w:9.3%"></span></span>
+                            <span class="bars-value num">2.6 s</span>
+                        </div>
+                    </div>
+                    <p class="evidence-note">Measured on a full run. About eleven times faster per listing.</p>
+                </figure>
+            </article>
+
+            <!-- PhilLexBot -->
+            <article class="feature">
+                <div class="feature-text">
+                    <p class="feature-context">Undergraduate thesis, defended, team of four</p>
+                    <h3>PhilLexBot: a chatbot for Philippine legal contracts</h3>
+                    <p>
+                        Upload a contract and ask questions about it. The bot answers strictly from the clauses it
+                        retrieves and cites the section each answer came from. I handled most of the testing.
+                    </p>
+                    <ul class="feature-points">
+                        <li><strong>0.81 retrieval precision</strong> across 75 questions on 5 contract types, evaluated with RAGAS.</li>
+                        <li>Traced the weaker answer scores to the privacy-masking trade-off. Users rated clarity <strong>4.21 out of 5</strong>.</li>
+                    </ul>
+                    <p class="stack">Python, Gemini, Qdrant, LangChain, RAGAS, Microsoft Presidio</p>
+                </div>
+
+                <figure class="evidence">
+                    <figcaption class="evidence-title">How a question gets answered</figcaption>
+                    <ol class="steps">
+                        <li><strong>Mask</strong><span>Personal data is hidden with Microsoft Presidio before anything else sees the contract.</span></li>
+                        <li><strong>Split</strong><span>Gemini breaks the contract into chunks that keep each clause whole.</span></li>
+                        <li><strong>Retrieve</strong><span>Qdrant finds the clauses closest to the question.</span></li>
+                        <li><strong>Answer</strong><span>The reply uses only those clauses and cites the section.</span></li>
+                    </ol>
+                </figure>
+            </article>
+
+            <!-- More projects -->
+            <div class="more">
+                <h3 class="more-title">More projects</h3>
+
+                <h4 class="more-group">Cloud and full-stack</h4>
+                <ul class="plist">
+                    <li class="prow">
+                        <div class="prow-title">Neon Pulse: highly available AWS architecture</div>
+                        <div class="prow-desc">
+                            <p>The brief asked for a single web server. I deployed two to four across three Availability Zones behind a load balancer, with CloudWatch alarms driving the scaling, then terminated a live instance to confirm the site kept serving. Final project, perfect score.</p>
+                            <p class="stack">AWS VPC, EC2, ALB, Auto Scaling, CloudWatch</p>
+                        </div>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Smart Inventory &amp; Financial Audit System</div>
+                        <div class="prow-desc">
+                            <p>A supply-chain app that sells perishable stock first-expired, first-out. Stock movements and audit logs are written in one transaction, so they can't drift apart. Includes a live dashboard and Excel audit exports.</p>
+                            <p class="stack">Java, Spring Boot, MySQL, Chart.js, SheetJS</p>
+                        </div>
+                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/InventorySystem" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Smart Inventory System (opens in a new tab)</span></a>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Condo Review Platform</div>
+                        <div class="prow-desc">
+                            <p>A site for reviewing condominiums, with accounts, search filters and ratings. Query optimization cut page load time by 34%.</p>
+                            <p class="stack">Express.js, MongoDB, JavaScript, Vercel</p>
+                        </div>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">E-Commerce Cookie Store</div>
+                        <div class="prow-desc">
+                            <p>An online store with ordering, order tracking and online payments.</p>
+                            <p class="stack">Next.js, Medusa.js, MongoDB</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4 class="more-group">Data, machine learning and automation</h4>
+                <ul class="plist">
+                    <li class="prow">
+                        <div class="prow-title">Steam Platform Analytics Dashboard</div>
+                        <div class="prow-desc">
+                            <p>A web app for exploring gaming habits on Steam: games played, hours logged and platform use, sliced with OLAP operations that made exploring the data about 40% faster.</p>
+                            <p class="stack">SQL, Supabase, JavaScript, HTML/CSS</p>
+                        </div>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Household Income Classification</div>
+                        <div class="prow-desc">
+                            <p>Compared k-nearest neighbors, logistic regression and Naive Bayes on accuracy, precision and recall. KNN came out best at 84% accuracy.</p>
+                            <p class="stack">Python, scikit-learn, pandas</p>
+                        </div>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">The Watchmen: enlistment monitor</div>
+                        <div class="prow-desc">
+                            <p>A Discord bot that watches DLSU course availability and alerts students the moment a slot opens.</p>
+                            <p class="stack">Python, Discord API</p>
+                        </div>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Personal AI automations</div>
+                        <div class="prow-desc">
+                            <p>Claude scans Philippine FMCG market developments for me and keeps a Notion tracker of internship and graduate roles up to date.</p>
+                            <p class="stack">Claude, Notion</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4 class="more-group">Coursework and design</h4>
+                <ul class="plist">
+                    <li class="prow">
+                        <div class="prow-title">Java Vending Machine</div>
+                        <div class="prow-desc">
+                            <p>A desktop vending machine simulator with sound, a maintenance mode and a record of every transaction.</p>
+                            <p class="stack">Java, Swing, MVC</p>
+                        </div>
+                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/vending-machine-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Java Vending Machine (opens in a new tab)</span></a>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Messenger Simulator</div>
+                        <div class="prow-desc">
+                            <p>A terminal messaging app in about 1,700 lines of C: accounts with password recovery, private and group messages, announcements and an admin module.</p>
+                            <p class="stack">C</p>
+                        </div>
+                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/messenger-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Messenger Simulator (opens in a new tab)</span></a>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Terminal Alien Shooter</div>
+                        <div class="prow-desc">
+                            <p>My first C project: a turn-based shooter where DLSU defends its border from three rival schools. Random spawns, and 100 points to win.</p>
+                            <p class="stack">C</p>
+                        </div>
+                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/alien-shooter-game" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Terminal Alien Shooter (opens in a new tab)</span></a>
+                    </li>
+                    <li class="prow">
+                        <div class="prow-title">Health Card Mobile Interface</div>
+                        <div class="prow-desc">
+                            <p>A freelance mobile app prototype that links a physical medical card to a patient's digital history. Approved by the client.</p>
+                            <p class="stack">Figma</p>
+                        </div>
+                        <a class="link-ext prow-link" href="https://www.figma.com/proto/MvYYHXB99CEejUsWrHV52h/Kapwakard-Draft?node-id=77-211&p=f&t=vPYhg0sK23iMa078-1&scaling=scale-down&content-scaling=fixed&page-id=77%3A137&starting-point-node-id=77%3A211&show-proto-sidebar=1" target="_blank" rel="noopener">Prototype<span aria-hidden="true">↗</span><span class="sr-only">: Health Card Mobile Interface (opens in a new tab)</span></a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="about-info reveal">
-            <div class="info-card">
-                <div class="info-row"><span class="label">University</span><span class="value dlsu-tag">De La Salle University</span></div>
-                <div class="info-row"><span class="label">Degree</span><span class="value">BS Computer Science — Software Tech</span></div>
-                <div class="info-row"><span class="label">Current Role</span><span class="value hl-green">Analytics Intern — Nestlé PH (thru Aug '26)</span></div>
-                <div class="info-row"><span class="label">Expected Grad</span><span class="value">February 2027</span></div>
-                <div class="info-row"><span class="label">Location</span><span class="value">Manila, Philippines</span></div>
-                <div class="info-row"><span class="label">Email</span><span class="value"><a href="mailto:karlandreiordinario@gmail.com">karlandreiordinario@gmail.com</a></span></div>
-                <div class="info-row"><span class="label">Phone</span><span class="value">+63 919 004 2377</span></div>
-                <div class="info-row"><span class="label">LinkedIn</span><span class="value"><a href="https://www.linkedin.com/in/karlordinario/" target="_blank">karlordinario ↗</a></span></div>
-                <div class="info-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/karlOrdinario" target="_blank">karlOrdinario ↗</a></span></div>
-                <div class="info-row"><span class="label">Status</span><span class="value hl-green">● Open to Opportunities</span></div>
-            </div>
+    </div>
+</section>
+
+<!-- ═══ EXPERIENCE ═══ -->
+<section class="section" id="experience">
+    <div class="wrap section-grid">
+        <header class="section-head">
+            <h2>Experience</h2>
+        </header>
+
+        <div class="section-body">
+            <article class="role role-lead">
+                <div class="role-meta">
+                    <p class="role-date num">Apr – Aug 2026</p>
+                    <p class="role-org">Nestlé Philippines</p>
+                    <p class="role-place">Makati</p>
+                </div>
+                <div class="role-body">
+                    <h3>Shopper Insights Analytics Intern</h3>
+                    <ul class="points">
+                        <li>Built a national pricing business case on a proposed price increase, estimating volume response from past increases in their macroeconomic context. Set out the conditions under which it would pay off and flagged the competitor price gap it would create.</li>
+                        <li>Presented to 7 sales and brand teams during Integrated Commercial Planning and defended regional and channel recommendations under questioning. Several were carried into the resulting plans.</li>
+                        <li>Correlated imported fuel inflation and consumer confidence against category mix shifts, by region and channel, to isolate where consumers were trading down.</li>
+                        <li>Prototyped a Power BI data model to replace a reporting workbook of 10 tabs, seven years and 100,000+ rows. Filtering across several dimensions fell from up to 30 minutes to seconds.</li>
+                        <li>Caught syndicated market data that no longer reconciled with the vendor's prior figures, corrected it before publication and escalated each case. The vendor reissued the data.</li>
+                        <li>Automated recurring updates across 20+ of the team's Excel sheets with Power Query.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <h3 class="subhead">Leadership</h3>
+
+            <article class="role">
+                <div class="role-meta">
+                    <p class="role-date num">Aug 2024 – Jul 2025</p>
+                    <p class="role-org">Archers Consulting Group</p>
+                    <p class="role-place">De La Salle University</p>
+                </div>
+                <div class="role-body">
+                    <h4>Manager for Corporate Relations</h4>
+                    <ul class="points">
+                        <li>Ran the partnerships cycle end to end: pitched 50+ companies and closed 4 for ₱300,000+ in combined cash and product support.</li>
+                        <li>Built a portal for sharing member resumes with partner companies. 5+ members turned its introductions into internships within one tenure.</li>
+                        <li>Standardized 20+ partnership documents and trained my successors.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="role">
+                <div class="role-meta">
+                    <p class="role-date num">Jan 2024 – Jan 2026</p>
+                    <p class="role-org">AWS Archers Learning Club</p>
+                    <p class="role-place">De La Salle University</p>
+                </div>
+                <div class="role-body">
+                    <h4>Founding Member and Director for External Relations</h4>
+                    <ul class="points">
+                        <li>Helped establish the club and built its external function from nothing, securing the speakers, venues and partners behind two annual calendars of cloud sessions.</li>
+                        <li>Built a pipeline of 500+ organizations and wrote the club's first partnership proposal framework, since adopted by successor committees.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="role">
+                <div class="role-meta">
+                    <p class="role-date num">Dec 2022 – Jan 2024</p>
+                    <p class="role-org">University Student Government, Executive Board</p>
+                    <p class="role-place">De La Salle University</p>
+                </div>
+                <div class="role-body">
+                    <h4>Chief of Staff</h4>
+                    <ul class="points">
+                        <li>Implemented 10+ organizational initiatives across training, internal policy, crisis response and structural reorganization.</li>
+                        <li>Handled 90+ personnel cases, from appointments and resignations to grievances.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="role">
+                <div class="role-meta">
+                    <p class="role-date num">Sep 2023 – Dec 2024</p>
+                    <p class="role-org">Affiliated Stanford Entrepreneurial Society Manila</p>
+                    <p class="role-place">Manila</p>
+                </div>
+                <div class="role-body">
+                    <h4>Partnerships Officer</h4>
+                    <ul class="points">
+                        <li>Secured 5+ partner organizations and 2+ speakers for events and yearlong programs, growing the contact base by 300+.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <p class="also">
+                Also: Assistant Head for Digital &amp; Tech Support at the USG Judiciary, where I led the overhaul of its website;
+                Academic Coordinator at Google Developer Student Club DLSU; Marketing Executive at the La Salle Debate Society;
+                and member of the DLSU Investors' Society.
+            </p>
         </div>
     </div>
 </section>
 
 <!-- ═══ SKILLS ═══ -->
-<section id="skills">
-    <div class="section-header reveal">
-        <span class="section-num">02</span>
-        <h2 class="section-title" data-split>Skills</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="skills-grid">
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Languages</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">Python</span><span class="skill-tag featured">Java</span>
-                <span class="skill-tag featured">JavaScript</span><span class="skill-tag featured">C</span>
-                <span class="skill-tag">C++</span><span class="skill-tag featured">SQL</span>
-                <span class="skill-tag">Go</span><span class="skill-tag">x86 Assembly</span><span class="skill-tag">RISC-V Assembly</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Data Analytics & Visualization</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">Power BI</span><span class="skill-tag featured">Advanced Excel</span>
-                <span class="skill-tag featured">PowerPoint</span><span class="skill-tag">Kantar</span>
-                <span class="skill-tag">Nielsen</span><span class="skill-tag featured">OLAP Operations</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Data Science & ML</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">Pandas</span><span class="skill-tag featured">NumPy</span>
-                <span class="skill-tag featured">scikit-learn</span><span class="skill-tag featured">Matplotlib</span>
-                <span class="skill-tag">Jupyter Notebook</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Web Development</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">HTML / CSS</span><span class="skill-tag featured">React.js</span>
-                <span class="skill-tag featured">Express.js</span><span class="skill-tag">Next.js</span>
-                <span class="skill-tag">WordPress</span><span class="skill-tag featured">Figma</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Backend & Databases</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">Spring Boot</span><span class="skill-tag featured">Supabase</span>
-                <span class="skill-tag featured">MySQL</span><span class="skill-tag featured">MongoDB</span>
-                <span class="skill-tag">DataGrip</span><span class="skill-tag">Medusa.js</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal">
-            <div class="skill-category-title">Tools & DevOps</div>
-            <div class="skill-tags">
-                <span class="skill-tag featured">Git / GitHub</span><span class="skill-tag">GitLab</span>
-                <span class="skill-tag">AWS</span><span class="skill-tag featured">Chart.js</span>
-                <span class="skill-tag">SheetJS</span><span class="skill-tag">Vercel</span>
-            </div>
-        </div>
-        <div class="skill-cat reveal skill-cat-wide">
-            <div class="skill-category-title">Interests</div>
-            <div class="skill-tags">
-                <span class="skill-tag">Data Engineering</span><span class="skill-tag">Quantitative Finance</span>
-                <span class="skill-tag">Banking Technology</span><span class="skill-tag">FinTech</span>
-                <span class="skill-tag">Cloud Computing</span><span class="skill-tag">UI/UX Design</span>
-                <span class="skill-tag">Machine Learning</span><span class="skill-tag">AI</span>
-            </div>
+<section class="section" id="skills">
+    <div class="wrap section-grid">
+        <header class="section-head">
+            <h2>Skills</h2>
+        </header>
+
+        <div class="section-body">
+            <dl class="skills">
+                <div>
+                    <dt>Analytics</dt>
+                    <dd>Power BI (DAX, Power Query), Advanced Excel, PowerPoint, SQL, pricing and scenario analysis, market and competitor analysis, statistical and time-series analysis, market research synthesis (Nielsen, Kantar, PSA)</dd>
+                </div>
+                <div>
+                    <dt>Programming</dt>
+                    <dd>Python (pandas, NumPy, scikit-learn, Playwright, openpyxl), SQL, Java, JavaScript, TypeScript, Go, C, C++, HTML/CSS</dd>
+                </div>
+                <div>
+                    <dt>Quantitative finance</dt>
+                    <dd>Monte Carlo simulation, derivatives pricing, VaR and CVaR, DCF valuation and financial modelling, portfolio construction and backtesting, SciPy, hmmlearn, PyPortfolioOpt, Streamlit</dd>
+                </div>
+                <div>
+                    <dt>AI and LLMs</dt>
+                    <dd>Retrieval-augmented generation, Gemini API, LangChain, Qdrant, RAGAS evaluation, Microsoft Presidio, Claude Code, prompt engineering</dd>
+                </div>
+                <div>
+                    <dt>Cloud and data</dt>
+                    <dd>AWS (VPC, EC2, Application Load Balancer, Auto Scaling, CloudWatch, S3, RDS, Lambda, DynamoDB), PostgreSQL, MySQL, MongoDB, Supabase, relational schema design, dimensional modelling, OLAP</dd>
+                </div>
+                <div>
+                    <dt>Software</dt>
+                    <dd>Spring Boot, React, Next.js, Express.js, Git and GitHub, GitHub Actions, pytest, Chart.js, Figma, Vercel</dd>
+                </div>
+                <div>
+                    <dt>Languages</dt>
+                    <dd>English (full professional proficiency), Filipino (native)</dd>
+                </div>
+            </dl>
         </div>
     </div>
 </section>
 
-<!-- ═══ PROJECTS ═══ -->
-<section id="projects">
-    <div class="section-header reveal">
-        <span class="section-num">03</span>
-        <h2 class="section-title" data-split>Projects</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="projects-grid">
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">01</span><span class="project-kind">Data · Web</span></div>
-                <h3 class="project-title">Steam Platform Analytics Dashboard</h3>
-                <p class="project-desc">Analytical web app visualizing consumer gaming habits on Steam — games played, hours logged, usage across platforms with OLAP operations.</p>
-                <div class="project-highlight">↑ 40% improved data exploration efficiency via OLAP ops</div>
-                <div class="project-stack"><span class="stack-tag">SQL</span><span class="stack-tag">Supabase</span><span class="stack-tag">HTML/CSS</span><span class="stack-tag">JavaScript</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
+<!-- ═══ ABOUT ═══ -->
+<section class="section" id="about">
+    <div class="wrap section-grid">
+        <header class="section-head">
+            <h2>About</h2>
+        </header>
 
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">02</span><span class="project-kind">ML</span></div>
-                <h3 class="project-title">Household Income Classification</h3>
-                <p class="project-desc">ML project comparing KNN, Logistic Regression, and Naive Bayes for income classification with full evaluation on accuracy, precision, and recall.</p>
-                <div class="project-highlight">84% classification accuracy — KNN identified as optimal</div>
-                <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">scikit-learn</span><span class="stack-tag">Pandas</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
+        <div class="section-body about">
+            <div class="about-text">
+                <p>
+                    I'm Karl, based in Makati. I study Computer Science at De La Salle University, majoring in Software
+                    Technology, and I'm on track to graduate in February 2027 as a Dean's List awardee.
+                </p>
+                <p>
+                    Most of what I do sits between a business question and the data that can answer it. At Nestlé that meant
+                    pricing, category mix and syndicated market data. On my own it has meant options, portfolios and company
+                    valuation. In both cases I care about the same thing: owning the outcome, not just the analysis or the code.
+                </p>
+                <p>
+                    Outside of that I've spent four years in student organizations, mostly doing partnerships: pitching
+                    companies, negotiating sponsorships and building the systems that outlast my term.
+                </p>
             </div>
-        </article>
 
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">03</span><span class="project-kind">Full-Stack</span></div>
-                <h3 class="project-title">Smart Inventory & Financial Audit System</h3>
-                <p class="project-desc">Full-stack supply chain app with FEFO algorithm for perishable inventory and ACID-compliant transactional accounting engine.</p>
-                <div class="project-highlight">100% data integrity across stock movements & audit logs</div>
-                <div class="project-stack"><span class="stack-tag">Spring Boot</span><span class="stack-tag">Chart.js</span><span class="stack-tag">SheetJS</span><span class="stack-tag">Java</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">04</span><span class="project-kind">Full-Stack</span></div>
-                <h3 class="project-title">Condo Review Platform</h3>
-                <p class="project-desc">Full-stack platform for reviewing condominiums with user auth, search filters, interactive ratings, and optimized database queries on Vercel.</p>
-                <div class="project-highlight">↓ 34% reduction in page load time via query optimization</div>
-                <div class="project-stack"><span class="stack-tag">Express.js</span><span class="stack-tag">MongoDB</span><span class="stack-tag">JavaScript</span><span class="stack-tag">Vercel</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">05</span><span class="project-kind">E-Commerce</span></div>
-                <h3 class="project-title">E-Commerce Cookie Store</h3>
-                <p class="project-desc">Full-featured store with ordering, order tracking, and online payments. Focused on seamless navigation and a visually engaging UI/UX layout.</p>
-                <div class="project-highlight">High-performance storefront with real-time order tracking</div>
-                <div class="project-stack"><span class="stack-tag">Next.js</span><span class="stack-tag">Medusa.js</span><span class="stack-tag">MongoDB</span><span class="stack-tag">CSS</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">06</span><span class="project-kind">AI · RAG</span></div>
-                <h3 class="project-title">Legal Contract Chatbot</h3>
-                <p class="project-desc">AI-powered legal assistant utilizing Retrieval-Augmented Generation (RAG) to analyze, summarize, and answer queries about complex legal contracts.</p>
-                <div class="project-highlight">Semantic search integration for automated legal analysis</div>
-                <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">LLMs</span><span class="stack-tag">Qdrant Vector DB</span></div>
-                <span class="project-link soon">Coming Soon <span class="pulse-dot"></span></span>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">07</span><span class="project-kind">Automation</span></div>
-                <h3 class="project-title">The Watchmen: Enlistment Monitor</h3>
-                <p class="project-desc">Automated Discord bot engineered to continuously monitor university course availability in real-time, instantly notifying students of open enrollment slots.</p>
-                <div class="project-highlight">Real-time web scraping and API alerts for DLSU enlistment</div>
-                <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">Discord API</span><span class="stack-tag">Automation</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">08</span><span class="project-kind">Systems · C</span></div>
-                <h3 class="project-title">Terminal Alien Shooter</h3>
-                <p class="project-desc">A custom-built arcade shooter featuring randomized enemy spawn logic, progressive difficulty patterns, and a dynamic scoring system with bonus points.</p>
-                <div class="project-highlight">Custom game loop and memory management built in C</div>
-                <div class="project-stack"><span class="stack-tag">C</span><span class="stack-tag">Game Logic</span><span class="stack-tag">Algorithms</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">09</span><span class="project-kind">Java · GUI</span></div>
-                <h3 class="project-title">Java Vending Machine</h3>
-                <p class="project-desc">A GUI-based simulation featuring interactive sounds and an integrated accounting engine for detailed transaction tracking and auditing.</p>
-                <div class="project-highlight">Full GUI interface with built-in transactional auditing</div>
-                <div class="project-stack"><span class="stack-tag">Java</span><span class="stack-tag">Swing/AWT</span><span class="stack-tag">OOP</span></div>
-                <a href="https://github.com/karlOrdinario/karlOrdinario" target="_blank" class="project-link">View on GitHub <span>↗</span></a>
-            </div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-            <div class="project-content">
-                <div class="project-top"><span class="project-num">10</span><span class="project-kind">UI/UX</span></div>
-                <h3 class="project-title">Health Card Mobile Interface</h3>
-                <p class="project-desc">Freelance UI/UX project designing a mobile app prototype that bridges physical medical cards with a digital database for accessible patient history.</p>
-                <div class="project-highlight">Client-approved interface for medical data tracking</div>
-                <div class="project-stack"><span class="stack-tag">Figma</span><span class="stack-tag">UI/UX Design</span><span class="stack-tag">Wireframing</span></div>
-                <a href="https://www.figma.com/proto/MvYYHXB99CEejUsWrHV52h/Kapwakard-Draft?node-id=77-211&p=f&t=vPYhg0sK23iMa078-1&scaling=scale-down&content-scaling=fixed&page-id=77%3A137&starting-point-node-id=77%3A211&show-proto-sidebar=1" target="_blank" class="project-link">View Prototype <span>↗</span></a>
-            </div>
-        </article>
-    </div>
-    <div class="carousel-hint" id="carouselHint"></div>
-</section>
-
-<!-- ═══ EXPERIENCE ═══ -->
-<section id="experience">
-    <div class="section-header reveal">
-        <span class="section-num">04</span>
-        <h2 class="section-title" data-split>Experience</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="exp-timeline">
-        <div class="exp-group-label reveal">Internship Experience</div>
-        <div class="exp-item reveal exp-featured">
-            <div>
-                <div class="exp-date">Apr 2026 — Aug 2026</div>
-                <div class="exp-org">Nestlé Philippines</div>
-                <img src="https://www.citypng.com/public/uploads/preview/nestle-white-logo-hd-png-701751694709061natmwf9rqw.png" alt="Nestlé logo" class="exp-org-logo" />
-            </div>
-            <div>
-                <div class="exp-role">Shopper Insights Analytics Intern</div>
-                <ul class="exp-points">
-                    <li>Synthesize multi-source market intelligence (Kantar, Nielsen, PSA) into category and brand health insights that inform management's sales and marketing decisions.</li>
-                    <li>Validate retail transaction data from 60+ outlets nationwide, flagging discrepancies to maintain integrity for regional promotional tracking.</li>
-                    <li>Author 30–40 page market desk research reports backed by 8–15-sheet workbooks, and lead the department's migration from Excel scorecards to Power BI.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="exp-group-label reveal">Organizational Experience</div>
-        <div class="exp-item reveal">
-            <div><div class="exp-date">Aug 2024 — Jul 2025</div><div class="exp-org">Archers Consulting Group · DLSU</div></div>
-            <div>
-                <div class="exp-role">Manager, Corporate Relations</div>
-                <ul class="exp-points">
-                    <li>Secured sponsorships from 4 companies totaling ₱300,000+ in cash and merchandise.</li>
-                    <li>Built a resume-sharing portal enabling 5+ members to land internships.</li>
-                    <li>Revised 20+ documents and templates; implemented junior officer training program.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="exp-item reveal">
-            <div><div class="exp-date">Jan 2024 — Jan 2026</div><div class="exp-org">AWS Archer's Learning Club · DLSU</div></div>
-            <div>
-                <div class="exp-role">Director, External Relations</div>
-                <ul class="exp-points">
-                    <li>Built and managed a partnerships database of 500+ organizations.</li>
-                    <li>Designed the organization's first partnership proposal and primer from scratch.</li>
-                    <li>Authored 15+ documents including email templates, trackers, and partnership guidelines.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="exp-item reveal">
-            <div><div class="exp-date">Jul 2024 — Oct 2025</div><div class="exp-org">USG Judiciary · DLSU</div></div>
-            <div>
-                <div class="exp-role">Asst. Head, Digital & Tech Support</div>
-                <ul class="exp-points">
-                    <li>Led the overhaul of the Judiciary Department's official website.</li>
-                    <li>Supervised IT infrastructure and information systems for the department.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="exp-item reveal">
-            <div><div class="exp-date">Sep 2023 — Dec 2024</div><div class="exp-org">Affiliated Stanford Entrepreneurial Society Manila</div></div>
-            <div>
-                <div class="exp-role">Partnerships Officer</div>
-                <ul class="exp-points">
-                    <li>Partnered with 5+ organizations for events and yearlong programs.</li>
-                    <li>Acquired 2+ speakers; maintained 300+ contact database entries.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="exp-item reveal">
-            <div><div class="exp-date">Dec 2022 — Jan 2024</div><div class="exp-org">University Student Government · DLSU</div></div>
-            <div>
-                <div class="exp-role">Chief of Staff</div>
-                <ul class="exp-points">
-                    <li>Oversaw organizational development for the entire student government body.</li>
-                    <li>Implemented 10+ major initiatives including training, policy-making, and crisis protocols.</li>
-                    <li>Processed and documented 90+ cases of appointments, resignations, and grievances.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══ WORK WITH ME ═══ -->
-<section id="work-with-me">
-    <div class="wwm-glow"></div>
-    <div class="section-header reveal">
-        <span class="section-num">05</span>
-        <h2 class="section-title" data-split>Work With Me</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="wwm-inner">
-        <div class="wwm-left reveal">
-            <span class="eyebrow">The next chapter</span>
-            <h3 class="wwm-headline">Here's what I<br/>bring to your <span class="hl">team.</span></h3>
-            <p class="wwm-sub">
-                Data analytics. Full-stack engineering. Machine learning. Leadership experience
-                across six organizations. I don't just crunch numbers or write code — I own the outcomes.
-                <br /><br />
-                Whether you need someone to turn data into decisions, ship features, or
-                grow alongside your team — I'm ready now. Let's talk.
-            </p>
-            <a href="#contact" class="btn btn-primary wwm-cta" data-magnetic><span>Let's Connect</span><span class="btn-arrow">→</span></a>
-        </div>
-        <div class="wwm-right reveal">
-            <div class="wwm-card">
-                <div class="wwm-card-label">Role Type</div>
-                <div class="wwm-card-title">Data Analytics & Engineering</div>
-                <div class="wwm-card-desc">Wrapping up a Shopper Insights internship at Nestlé Philippines (Apr–Aug 2026) — this is where I want to grow next.</div>
-                <span class="status-badge">Open September 2026</span>
-            </div>
-            <div class="wwm-card">
-                <div class="wwm-card-label">Role Type</div>
-                <div class="wwm-card-title">Software Engineering</div>
-                <div class="wwm-card-desc">Full-stack, backend, or frontend — a strength I still bring to the table.</div>
-                <span class="status-badge">Also Open</span>
-            </div>
-            <div class="wwm-card">
-                <div class="wwm-card-label">Role Type</div>
-                <div class="wwm-card-title">Full-Time · Feb 2027</div>
-                <div class="wwm-card-desc">Graduating February 2027 — open to pre-placement and early offers now.</div>
-                <span class="status-badge">Coming Soon</span>
-            </div>
+            <dl class="facts">
+                <div><dt>Degree</dt><dd>BS Computer Science, Major in Software Technology</dd></div>
+                <div><dt>University</dt><dd>De La Salle University, Manila</dd></div>
+                <div><dt>Graduating</dt><dd>February 2027</dd></div>
+                <div><dt>Honors</dt><dd>Dean's List awardee</dd></div>
+                <div><dt>Credentials</dt><dd>AWS Academy Graduate, Cloud Foundations (2026). AWS Solutions Architect – Associate in progress.</dd></div>
+                <div><dt>Coursework</dt><dd>Probability &amp; Statistics, Linear Algebra, Data Analytics Algorithms, Database Management, Artificial Intelligence, Software Engineering, DevOps, Cloud Computing</dd></div>
+                <div><dt>Location</dt><dd>Makati, Philippines</dd></div>
+            </dl>
         </div>
     </div>
 </section>
 
 <!-- ═══ CONTACT ═══ -->
-<section id="contact">
-    <div class="contact-eyebrow reveal">Let's work together</div>
-    <h2 class="contact-headline reveal">Got an <span class="accent"><em>opportunity?</em></span><br />Let's talk.</h2>
-    <p class="contact-sub reveal">
-        I'm wrapping up my internship at Nestlé Philippines in August 2026 and open to new internships,
-        freelance projects, and full-time roles after that — plus full-time starting after graduation
-        in February 2027. Whether you have a project in mind or just want to connect — my inbox is open.
-    </p>
-    <a href="mailto:karlandreiordinario@gmail.com" class="contact-email reveal" data-magnetic>karlandreiordinario@gmail.com <span>↗</span></a>
-    <div class="contact-links reveal">
-        <a href="https://www.linkedin.com/in/karlordinario/" target="_blank" class="contact-link">LinkedIn</a>
-        <a href="https://github.com/karlOrdinario" target="_blank" class="contact-link">GitHub</a>
-        <a href="tel:+639190042377" class="contact-link">+63 919 004 2377</a>
+<section class="section section-contact" id="contact">
+    <span id="work-with-me" class="anchor-alias"></span>
+    <div class="wrap section-grid">
+        <header class="section-head">
+            <h2>Contact</h2>
+        </header>
+
+        <div class="section-body">
+            <p class="contact-lead">Have a role or a project in mind? I'd like to hear about it.</p>
+            <p class="contact-sub">
+                I graduate in February 2027 and I'm looking for analyst and engineering roles in strategy and analytics,
+                finance and markets, and cloud and software. I'm open to full-time offers for 2027, and to internships and
+                project work before then.
+            </p>
+            <a href="mailto:karlandreiordinario@gmail.com" class="contact-email">karlandreiordinario@gmail.com</a>
+            <ul class="contact-links">
+                <li><a class="link-ext" href="https://www.linkedin.com/in/karlordinario/" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+                <li><a class="link-ext" href="https://github.com/karlOrdinario" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+                <li><a class="link-ext" href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" rel="noopener">Resume<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+                <li><a class="link-ext" href="tel:+639190042377">+63 919 004 2377</a></li>
+            </ul>
+        </div>
     </div>
 </section>
 
-<footer>
-    <p class="footer-logo"><span class="ko">KO</span><span class="dot">.</span></p>
-    <p>© <span id="footer-year"></span> Karl Andrei Ordinario · Manila, Philippines</p>
-    <p>Built with vanilla HTML / CSS / JS · <span class="footer-egg" onclick="startBreakMode()" title="?">☕</span></p>
+</main>
+
+<footer class="site-footer">
+    <div class="wrap footer-inner">
+        <p class="footer-logo">KO<span class="logo-dot">.</span></p>
+        <p>© <span id="footer-year">2026</span> Karl Andrei Ordinario. Makati, Philippines.</p>
+        <p>Built with plain HTML, CSS and JavaScript <button type="button" class="footer-egg" id="footerEgg" aria-label="Take a break" title="?">☕</button></p>
+    </div>
 </footer>
 
 <!-- ═══ TERMINAL ═══ -->
-<button id="terminalFab" class="terminal-fab" onclick="toggleTerminal()" aria-label="Open terminal">
-    <span class="fab-prompt">&gt;_</span>
+<button type="button" id="terminalFab" class="terminal-fab" aria-label="Open terminal" aria-controls="terminal" aria-expanded="false">
+    <span aria-hidden="true">&gt;_</span>
 </button>
 
-<div id="terminal" class="terminal-hidden">
+<div id="terminal" class="terminal-hidden" role="dialog" aria-label="Portfolio terminal" inert>
     <div class="terminal-header">
-        <span class="dot red" onclick="toggleTerminal()"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
+        <button type="button" class="term-dot red" id="terminalClose" aria-label="Close terminal"></button>
+        <span class="term-dot yellow" aria-hidden="true"></span>
+        <span class="term-dot green" aria-hidden="true"></span>
         <span class="title">ko@portfolio ~</span>
     </div>
     <div class="terminal-body" id="term-body">
-        <p>Welcome to <span class="term-hl">KO.</span> portfolio terminal v2.0</p>
+        <p>Welcome to <span class="term-hl">KO.</span> portfolio terminal v3.0</p>
         <p>Type <span class="term-white">'help'</span> to see available commands. There are secrets.</p>
-        <div id="term-output"></div>
+        <div id="term-output" role="log" aria-live="polite"></div>
         <div class="term-input-line">
-            <span class="prompt">ko@portfolio:~$</span>
-            <input type="text" id="term-input" autocomplete="off" spellcheck="false" placeholder="type a command..." />
+            <label class="prompt" for="term-input">ko@portfolio:~$</label>
+            <input type="text" id="term-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="type a command..." />
         </div>
     </div>
 </div>
