@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Karl Andrei Ordinario — Data Analyst & Software Engineer</title>
 
-    <!-- Apply the saved theme before first paint -->
+    <!-- Pick the theme before first paint: the visitor's own choice for this visit if they
+         made one, otherwise light during the day and dark at night by their local clock. -->
     <script>
         (function () {
-            try {
-                var t = localStorage.getItem('ko-theme');
-                if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-            } catch (e) {}
+            var t = null;
+            try { t = sessionStorage.getItem('ko-theme'); } catch (e) {}
+            if (t !== 'light' && t !== 'dark') {
+                var h = new Date().getHours();
+                t = (h >= 6 && h < 18) ? 'light' : 'dark';
+            }
+            document.documentElement.setAttribute('data-theme', t);
             document.documentElement.classList.add('js');
         })();
     </script>
@@ -23,7 +27,7 @@
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1113'/%3E%3Ctext x='8' y='43' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='28' fill='%23EEF0F1'%3EKO%3C/text%3E%3Ccircle cx='54' cy='40' r='4' fill='%2334D399'/%3E%3C/svg%3E" />
     <link rel="canonical" href="https://karlordinario.vercel.app/" />
-    <meta name="theme-color" content="#0F1113" />
+    <meta name="theme-color" content="#F5F3EC" />
 
     <meta name="title" content="Karl Andrei Ordinario — Data Analyst & Software Engineer" />
     <meta name="description" content="Portfolio of Karl Andrei Ordinario: final-year BS Computer Science student at De La Salle University and former Shopper Insights Analytics Intern at Nestlé Philippines. Commercial analytics, quantitative finance, AI and cloud projects." />
@@ -58,6 +62,14 @@
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ═══ BACKDROP: colour wash, contour lines (light), speckle (dark), grain ═══ -->
+<div class="backdrop" aria-hidden="true">
+    <div class="backdrop-wash"></div>
+    <svg class="backdrop-contours" id="contours" preserveAspectRatio="none"></svg>
+    <div class="backdrop-speckle"></div>
+    <div class="backdrop-grain"></div>
+</div>
 
 <!-- ═══ EASTER EGG LAYERS ═══ -->
 <div id="breakMode" class="break-mode" role="dialog" aria-modal="true" aria-labelledby="breakTitle" hidden>
@@ -119,29 +131,24 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="top">
-    <div class="hero-aurora" aria-hidden="true"></div>
     <div class="wrap hero-grid">
         <div class="hero-copy">
             <p class="hero-status"><span class="status-dot" aria-hidden="true"></span><span id="heroGreeting">Open to analyst, finance and engineering roles. Graduating February 2027.</span></p>
             <h1 class="hero-name">Karl Andrei<br />Ordinario</h1>
+            <span class="name-rule" aria-hidden="true"></span>
             <p class="hero-lead">Data analyst and software engineer. I work on commercial analytics, quantitative finance and the software underneath them.</p>
             <p class="hero-desc">
-                I'm a final-year Computer Science student at De La Salle University. In 2026 I spent five months on the
-                Shopper Insights team at Nestlé Philippines, where I built a national pricing business case and presented
-                to seven sales and brand teams. On my own time I build finance tools that check their own math.
+                At Nestlé Philippines I built a national pricing business case and presented it to seven sales and
+                brand teams. On my own time I build finance tools that check their own math.
             </p>
             <div class="hero-cta">
                 <a href="#work" class="btn btn-primary">See my work</a>
                 <a href="https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link" target="_blank" rel="noopener" class="btn btn-outline">Open resume<span class="sr-only"> (opens in a new tab)</span></a>
                 <a href="mailto:karlandreiordinario@gmail.com" class="btn btn-text">Email me</a>
             </div>
-            <p class="hero-hint">
-                <span class="hint-keys">psst: press <kbd>`</kbd> for the terminal, or try typing <span class="hint-word">nestle</span></span>
-                <span class="hint-touch">psst: tap <kbd>&gt;_</kbd> for the terminal, then type <span class="hint-word">nestle</span></span>
-            </p>
         </div>
 
-        <figure class="sim" aria-labelledby="simTitle">
+        <figure class="sim glass" aria-labelledby="simTitle">
             <div class="sim-head">
                 <h2 class="sim-title" id="simTitle">Pricing a call option by simulation</h2>
                 <button type="button" class="btn btn-outline btn-small" id="simRerun">Run again</button>
@@ -156,19 +163,23 @@
             </dl>
             <p class="sim-verdict" id="simVerdict">Simulating…</p>
             <figcaption>
-                Your browser just simulated 2,000 price paths for a one-year call option (strike 100, volatility 20%, rate 5%)
-                and compared the answer with the exact formula. My <a href="#mcquant">mcquant</a> engine runs this check on every price it produces.
+                Your browser just simulated 2,000 price paths for a one-year call option and checked the answer against
+                the exact formula. My <a href="#mcquant">mcquant</a> engine runs this check on every price it produces.
             </figcaption>
         </figure>
     </div>
 
     <div class="wrap">
-        <dl class="glance">
+        <dl class="glance glass">
             <div><dt>Education</dt><dd>BS Computer Science, De La Salle University<span>Dean's List awardee</span></dd></div>
             <div><dt>Experience</dt><dd>Shopper Insights Analytics Intern, Nestlé Philippines<span>April to August 2026</span></dd></div>
             <div><dt>Certification</dt><dd>AWS Certified Cloud Practitioner<span>2026</span></dd></div>
             <div><dt>Availability</dt><dd>Full-time from February 2027<span>Internships and project work before then</span></dd></div>
         </dl>
+        <p class="hero-hint">
+            <span class="hint-keys">psst: press <kbd>`</kbd> for the terminal, or try typing <span class="hint-word">nestle</span></span>
+            <span class="hint-touch">psst: tap <kbd>&gt;_</kbd> for the terminal, then type <span class="hint-word">nestle</span></span>
+        </p>
     </div>
 </section>
 
@@ -185,7 +196,7 @@
         <div class="carousel carousel-featured" data-carousel>
             <div class="carousel-track" role="region" aria-label="Featured projects">
 
-                <article class="card fcard" id="mcquant" data-slide>
+                <article class="card fcard glass" id="mcquant" data-slide>
                     <div class="fcard-text">
                         <p class="card-meta"><span class="tag">Quantitative finance</span><span>Personal project, 2026</span></p>
                         <h3>mcquant: a Monte Carlo engine that checks its own answers</h3>
@@ -237,7 +248,7 @@
                     </details>
                 </article>
 
-                <article class="card fcard" data-slide>
+                <article class="card fcard glass" data-slide>
                     <div class="fcard-text">
                         <p class="card-meta"><span class="tag">Quantitative finance</span><span>Personal project, 2026</span></p>
                         <h3>Regime-switching portfolio model</h3>
@@ -270,7 +281,7 @@
                     </details>
                 </article>
 
-                <article class="card fcard" data-slide>
+                <article class="card fcard glass" data-slide>
                     <div class="fcard-text">
                         <p class="card-meta"><span class="tag">Automation</span><span>Built on my own initiative at Nestlé Philippines, 2026</span></p>
                         <h3>Online Availability Checker</h3>
@@ -304,7 +315,7 @@
                     </details>
                 </article>
 
-                <article class="card fcard" data-slide>
+                <article class="card fcard glass" data-slide>
                     <div class="fcard-text">
                         <p class="card-meta"><span class="tag">AI</span><span>Undergraduate thesis, defended, team of four</span></p>
                         <h3>PhilLexBot: a chatbot for Philippine legal contracts</h3>
@@ -354,14 +365,14 @@
 
             <div class="carousel carousel-more" data-carousel>
                 <div class="carousel-track" role="region" aria-label="More projects">
-                    <article class="card pcard" data-cat="cloud" data-slide>
+                    <article class="card pcard glass-solid" data-cat="cloud" data-slide>
                         <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
                         <h4>Neon Pulse: highly available AWS architecture</h4>
                         <p class="pcard-desc">The brief asked for a single web server. I deployed two to four across three Availability Zones behind a load balancer, scaled by CloudWatch alarms, then terminated a live instance to confirm the site kept serving.</p>
                         <p class="pcard-win">Final project, perfect score</p>
                         <p class="stack">AWS VPC, EC2, ALB, Auto Scaling, CloudWatch</p>
                     </article>
-                    <article class="card pcard" data-cat="cloud" data-slide>
+                    <article class="card pcard glass-solid" data-cat="cloud" data-slide>
                         <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
                         <h4>Smart Inventory &amp; Financial Audit System</h4>
                         <p class="pcard-desc">A supply-chain app that sells perishable stock first-expired, first-out, with a live dashboard and Excel audit exports.</p>
@@ -369,53 +380,53 @@
                         <p class="stack">Java, Spring Boot, MySQL, Chart.js, SheetJS</p>
                         <a class="link-ext" href="https://github.com/karlOrdinario/InventorySystem" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Smart Inventory &amp; Financial Audit System (opens in a new tab)</span></a>
                     </article>
-                    <article class="card pcard" data-cat="cloud" data-slide>
+                    <article class="card pcard glass-solid" data-cat="cloud" data-slide>
                         <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
                         <h4>Condo Review Platform</h4>
                         <p class="pcard-desc">A site for reviewing condominiums, with accounts, search filters and ratings.</p>
                         <p class="pcard-win">34% faster page loads after query optimization</p>
                         <p class="stack">Express.js, MongoDB, JavaScript, Vercel</p>
                     </article>
-                    <article class="card pcard" data-cat="cloud" data-slide>
+                    <article class="card pcard glass-solid" data-cat="cloud" data-slide>
                         <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
                         <h4>E-Commerce Cookie Store</h4>
                         <p class="pcard-desc">An online store with ordering, order tracking and online payments.</p>
                         <p class="stack">Next.js, Medusa.js, MongoDB</p>
                     </article>
-                    <article class="card pcard" data-cat="data" data-slide>
+                    <article class="card pcard glass-solid" data-cat="data" data-slide>
                         <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
                         <h4>Steam Platform Analytics Dashboard</h4>
                         <p class="pcard-desc">A web app for exploring gaming habits on Steam: games played, hours logged and platform use, sliced with OLAP operations.</p>
                         <p class="pcard-win">About 40% faster data exploration</p>
                         <p class="stack">SQL, Supabase, JavaScript, HTML/CSS</p>
                     </article>
-                    <article class="card pcard" data-cat="data" data-slide>
+                    <article class="card pcard glass-solid" data-cat="data" data-slide>
                         <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
                         <h4>Household Income Classification</h4>
                         <p class="pcard-desc">Compared k-nearest neighbors, logistic regression and Naive Bayes on accuracy, precision and recall.</p>
                         <p class="pcard-win">KNN came out best at 84% accuracy</p>
                         <p class="stack">Python, scikit-learn, pandas</p>
                     </article>
-                    <article class="card pcard" data-cat="data" data-slide>
+                    <article class="card pcard glass-solid" data-cat="data" data-slide>
                         <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
                         <h4>The Watchmen: enlistment monitor</h4>
                         <p class="pcard-desc">A Discord bot that watches DLSU course availability and alerts students the moment a slot opens.</p>
                         <p class="stack">Python, Discord API</p>
                     </article>
-                    <article class="card pcard" data-cat="data" data-slide>
+                    <article class="card pcard glass-solid" data-cat="data" data-slide>
                         <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
                         <h4>Personal AI automations</h4>
                         <p class="pcard-desc">Claude scans Philippine FMCG market developments for me and keeps a Notion tracker of internship and graduate roles up to date.</p>
                         <p class="stack">Claude, Notion</p>
                     </article>
-                    <article class="card pcard" data-cat="course" data-slide>
+                    <article class="card pcard glass-solid" data-cat="course" data-slide>
                         <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
                         <h4>Java Vending Machine</h4>
                         <p class="pcard-desc">A desktop vending machine simulator with sound, a maintenance mode and a record of every transaction.</p>
                         <p class="stack">Java, Swing, MVC</p>
                         <a class="link-ext" href="https://github.com/karlOrdinario/vending-machine-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Java Vending Machine (opens in a new tab)</span></a>
                     </article>
-                    <article class="card pcard" data-cat="course" data-slide>
+                    <article class="card pcard glass-solid" data-cat="course" data-slide>
                         <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
                         <h4>Messenger Simulator</h4>
                         <p class="pcard-desc">A terminal messaging app: accounts with password recovery, private and group messages, announcements and an admin module.</p>
@@ -423,14 +434,14 @@
                         <p class="stack">C</p>
                         <a class="link-ext" href="https://github.com/karlOrdinario/messenger-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Messenger Simulator (opens in a new tab)</span></a>
                     </article>
-                    <article class="card pcard" data-cat="course" data-slide>
+                    <article class="card pcard glass-solid" data-cat="course" data-slide>
                         <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
                         <h4>Terminal Alien Shooter</h4>
                         <p class="pcard-desc">My first C project: a turn-based shooter where DLSU defends its border from three rival schools. Random spawns, and 100 points to win.</p>
                         <p class="stack">C</p>
                         <a class="link-ext" href="https://github.com/karlOrdinario/alien-shooter-game" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Terminal Alien Shooter (opens in a new tab)</span></a>
                     </article>
-                    <article class="card pcard" data-cat="course" data-slide>
+                    <article class="card pcard glass-solid" data-cat="course" data-slide>
                         <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
                         <h4>Health Card Mobile Interface</h4>
                         <p class="pcard-desc">A freelance mobile app prototype that links a physical medical card to a patient's digital history.</p>
@@ -567,7 +578,7 @@
                 </div>
                 <div>
                     <dt>Quantitative finance</dt>
-                    <dd><ul class="chips"><li>Monte Carlo simulation</li><li>derivatives pricing</li><li>VaR and CVaR</li><li>DCF valuation and financial modelling</li><li>portfolio construction and backtesting</li><li>SciPy</li><li>hmmlearn</li><li>PyPortfolioOpt</li><li>Streamlit</li></ul></dd>
+                    <dd><ul class="chips"><li>Monte Carlo simulation</li><li>derivatives pricing</li><li>VaR and CVaR</li><li>DCF valuation and financial modeling</li><li>portfolio construction and backtesting</li><li>SciPy</li><li>hmmlearn</li><li>PyPortfolioOpt</li><li>Streamlit</li></ul></dd>
                 </div>
                 <div>
                     <dt>AI and LLMs</dt>
@@ -575,7 +586,7 @@
                 </div>
                 <div>
                     <dt>Cloud and data</dt>
-                    <dd><ul class="chips"><li>AWS (VPC, EC2, Application Load Balancer, Auto Scaling, CloudWatch, S3, RDS, Lambda, DynamoDB)</li><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>Supabase</li><li>relational schema design</li><li>dimensional modelling</li><li>OLAP</li></ul></dd>
+                    <dd><ul class="chips"><li>AWS (VPC, EC2, Application Load Balancer, Auto Scaling, CloudWatch, S3, RDS, Lambda, DynamoDB)</li><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>Supabase</li><li>relational schema design</li><li>dimensional modeling</li><li>OLAP</li></ul></dd>
                 </div>
                 <div>
                     <dt>Software</dt>
@@ -589,14 +600,14 @@
 
             <h3 class="subhead">Soft skills</h3>
             <dl class="soft">
-                <div><dt>Consulting</dt><dd>A month of consulting training, plus a year managing corporate relations at Archers Consulting Group.</dd></div>
-                <div><dt>Problem solving</dt><dd>Built a national pricing business case at Nestlé and traced where consumers were trading down.</dd></div>
-                <div><dt>Presentation</dt><dd>Presented to 7 sales and brand teams and defended recommendations under questioning.</dd></div>
-                <div><dt>Negotiation</dt><dd>Pitched 50+ companies and closed ₱300,000+ in sponsorships, negotiating the terms of each.</dd></div>
-                <div><dt>Leadership</dt><dd>Chief of Staff of the University Student Government, and manager and director roles in two more organizations.</dd></div>
-                <div><dt>Communication</dt><dd>Wrote 30 to 40 page market research reports and a 26-page handover manual.</dd></div>
-                <div><dt>Relationship building</dt><dd>Built a partnership pipeline of 500+ organizations and trained my successors.</dd></div>
-                <div><dt>Stakeholder management</dt><dd>Worked with sales teams, brand managers and department leadership, and escalated data errors to vendors until they reissued corrected figures.</dd></div>
+                <div class="glass-solid"><dt>Consulting</dt><dd>A month of consulting training, plus a year managing corporate relations at Archers Consulting Group.</dd></div>
+                <div class="glass-solid"><dt>Problem solving</dt><dd>Built a national pricing business case at Nestlé and traced where consumers were trading down.</dd></div>
+                <div class="glass-solid"><dt>Presentation</dt><dd>Presented to 7 sales and brand teams and defended recommendations under questioning.</dd></div>
+                <div class="glass-solid"><dt>Negotiation</dt><dd>Pitched 50+ companies and closed ₱300,000+ in sponsorships, negotiating the terms of each.</dd></div>
+                <div class="glass-solid"><dt>Leadership</dt><dd>Chief of Staff of the University Student Government, and manager and director roles in two more organizations.</dd></div>
+                <div class="glass-solid"><dt>Communication</dt><dd>Wrote 30 to 40 page market research reports and a 26-page handover manual.</dd></div>
+                <div class="glass-solid"><dt>Relationship building</dt><dd>Built a partnership pipeline of 500+ organizations and trained my successors.</dd></div>
+                <div class="glass-solid"><dt>Stakeholder management</dt><dd>Worked with sales teams, brand managers and department leadership, and escalated data errors to vendors until they reissued corrected figures.</dd></div>
             </dl>
         </div>
     </div>
@@ -626,7 +637,7 @@
                 </p>
             </div>
 
-            <dl class="facts">
+            <dl class="facts glass">
                 <div><dt>Degree</dt><dd>BS Computer Science, Major in Software Technology</dd></div>
                 <div><dt>University</dt><dd>De La Salle University, Manila</dd></div>
                 <div><dt>Graduating</dt><dd>February 2027</dd></div>
