@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:ital,wght@0,400..700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1113'/%3E%3Ctext x='8' y='43' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='28' fill='%23EEF0F1'%3EKO%3C/text%3E%3Ccircle cx='54' cy='40' r='4' fill='%23FF6A3A'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1113'/%3E%3Ctext x='8' y='43' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='28' fill='%23EEF0F1'%3EKO%3C/text%3E%3Ccircle cx='54' cy='40' r='4' fill='%2334D399'/%3E%3C/svg%3E" />
     <link rel="canonical" href="https://karlordinario.vercel.app/" />
     <meta name="theme-color" content="#0F1113" />
 
@@ -98,6 +98,7 @@
             </button>
         </div>
     </div>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 </header>
 
 <div class="mobile-menu" id="mobileMenu" hidden>
@@ -118,10 +119,11 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="top">
+    <div class="hero-aurora" aria-hidden="true"></div>
     <div class="wrap hero-grid">
         <div class="hero-copy">
             <p class="hero-status"><span class="status-dot" aria-hidden="true"></span><span id="heroGreeting">Open to analyst, finance and engineering roles. Graduating February 2027.</span></p>
-            <h1 class="hero-name">Karl Andrei Ordinario</h1>
+            <h1 class="hero-name">Karl Andrei<br />Ordinario</h1>
             <p class="hero-lead">Data analyst and software engineer. I work on commercial analytics, quantitative finance and the software underneath them.</p>
             <p class="hero-desc">
                 I'm a final-year Computer Science student at De La Salle University. In 2026 I spent five months on the
@@ -159,39 +161,47 @@
             </figcaption>
         </figure>
     </div>
+
+    <div class="wrap">
+        <dl class="glance">
+            <div><dt>Education</dt><dd>BS Computer Science, De La Salle University<span>Dean's List awardee</span></dd></div>
+            <div><dt>Experience</dt><dd>Shopper Insights Analytics Intern, Nestlé Philippines<span>April to August 2026</span></dd></div>
+            <div><dt>Certification</dt><dd>AWS Certified Cloud Practitioner<span>2026</span></dd></div>
+            <div><dt>Availability</dt><dd>Full-time from February 2027<span>Internships and project work before then</span></dd></div>
+        </dl>
+    </div>
 </section>
 
 <!-- ═══ WORK ═══ -->
 <section class="section" id="work">
     <span id="projects" class="anchor-alias"></span>
-    <div class="wrap section-grid">
-        <header class="section-head">
+    <div class="wrap">
+        <header class="section-head section-head-wide">
             <h2>Work</h2>
             <p>Four projects I'd walk you through first, then everything else.</p>
         </header>
 
-        <div class="section-body">
+        <!-- Featured: stacked cards on desktop, a swipe carousel on phones -->
+        <div class="carousel carousel-featured" data-carousel>
+            <div class="carousel-track" role="region" aria-label="Featured projects">
 
-            <!-- mcquant -->
-            <article class="feature" id="mcquant">
-                <div class="feature-text">
-                    <p class="feature-context">Personal project, 2026</p>
-                    <h3>mcquant: a Monte Carlo engine that checks its own answers</h3>
-                    <p>
-                        A Python library that prices options, measures portfolio risk and values companies by simulation.
-                        Every Monte Carlo price in the test suite is compared against an independent exact formula,
-                        binomial tree or characteristic-function integral, and must land within four standard errors.
-                    </p>
-                    <ul class="feature-points">
-                        <li><strong>33,700× variance reduction</strong> on an arithmetic Asian call by combining randomised Sobol quasi-Monte Carlo with a control variate.</li>
-                        <li><strong>13 of 13 validation benchmarks pass</strong>, backed by 299 tests at 98% coverage and CI on GitHub Actions.</li>
-                        <li><strong>A full valuation of Monde Nissin</strong> (PSE: MONDE) from public filings: DCF, 50,000-run Monte Carlo DCF, trading comps and a live Excel model.</li>
-                    </ul>
-                    <p class="stack">Python, NumPy, SciPy, pandas, Streamlit, pytest, Hypothesis, GitHub Actions</p>
-                    <a class="link-ext" href="https://github.com/karlOrdinario/mcquant" target="_blank" rel="noopener">View mcquant on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-                </div>
-
-                <figure class="evidence">
+                <article class="card fcard" id="mcquant" data-slide>
+                    <div class="fcard-text">
+                        <p class="card-meta"><span class="tag">Quantitative finance</span><span>Personal project, 2026</span></p>
+                        <h3>mcquant: a Monte Carlo engine that checks its own answers</h3>
+                        <p class="card-summary">A Python library that prices options, measures portfolio risk and values companies by simulation. Every simulated price must land within four standard errors of an independent exact answer.</p>
+                        <dl class="stats">
+                            <div><dt>variance reduction on an Asian call option</dt><dd>33,700×</dd></div>
+                            <div><dt>validation benchmarks pass</dt><dd>13 of 13</dd></div>
+                            <div><dt>tests, at 98% coverage</dt><dd>299</dd></div>
+                        </dl>
+                        <p class="card-extra">Includes a full valuation of Monde Nissin (PSE: MONDE) from public filings: DCF, a 50,000-run Monte Carlo DCF, trading comps and a live Excel model.</p>
+                        <p class="stack">Python, NumPy, SciPy, pandas, Streamlit, pytest, Hypothesis, GitHub Actions</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/mcquant" target="_blank" rel="noopener">View mcquant on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                    </div>
+                    <details class="evidence-wrap" open>
+                        <summary>Show the valuation chart</summary>
+                        <figure class="evidence">
                     <figcaption class="evidence-title">Monde Nissin value per share, by method</figcaption>
                     <div class="ff" role="img" aria-label="Football field chart. DCF Monte Carlo: 7.23 to 11.37 pesos. DCF sensitivity: 8.18 to 12.29. Trading comps on EV to EBITDA: 6.52 to 9.63. Trading comps on P/E: 5.81 to 8.91. Analyst price targets: 5.35 to 12.30. 52-week trading range: 5.61 to 7.46. Market price: 6.40.">
                         <div class="ff-row ff-row-key" style="--lo:7.23; --hi:11.37; --mid:9.02">
@@ -224,28 +234,26 @@
                     </div>
                     <p class="evidence-note"><span class="ff-legend-line" aria-hidden="true"></span>Market price ₱6.40 on 6 November 2026. A learning project on public information, not investment advice.</p>
                 </figure>
-            </article>
+                    </details>
+                </article>
 
-            <!-- Regime-switching -->
-            <article class="feature">
-                <div class="feature-text">
-                    <p class="feature-context">Personal project, 2026</p>
-                    <h3>Regime-switching portfolio model</h3>
-                    <p>
-                        A two-state Hidden Markov Model reads calm and turbulent markets from 16 years of price data,
-                        and the portfolio switches between a maximum-Sharpe allocation and a minimum-volatility one with
-                        equity capped at 30%. Features are lagged a day to avoid look-ahead bias, and the model is
-                        retrained every month in a walk-forward backtest.
-                    </p>
-                    <ul class="feature-points">
-                        <li><strong>Halved maximum drawdown</strong> against a 60/40 benchmark over 164 monthly rebalances, and lifted the Sharpe ratio from 0.89 to 0.98.</li>
-                        <li>Picked out the 2011, 2018, 2020 and 2022 stress periods without being told about them.</li>
-                    </ul>
-                    <p class="stack">Python, hmmlearn, PyPortfolioOpt, scikit-learn, pandas, Yahoo Finance data</p>
-                    <a class="link-ext" href="https://github.com/karlOrdinario/Portfolio-Optimizer" target="_blank" rel="noopener">View the optimizer on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
-                </div>
-
-                <figure class="evidence">
+                <article class="card fcard" data-slide>
+                    <div class="fcard-text">
+                        <p class="card-meta"><span class="tag">Quantitative finance</span><span>Personal project, 2026</span></p>
+                        <h3>Regime-switching portfolio model</h3>
+                        <p class="card-summary">A Hidden Markov Model reads calm and turbulent markets from price data, and the portfolio switches between a maximum-Sharpe allocation and a minimum-volatility one that caps equity at 30%.</p>
+                        <dl class="stats">
+                            <div><dt>years of market data</dt><dd>16</dd></div>
+                            <div><dt>monthly walk-forward rebalances</dt><dd>164</dd></div>
+                            <div><dt>stress periods found unprompted: 2011, 2018, 2020, 2022</dt><dd>4</dd></div>
+                        </dl>
+                        <p class="card-extra">Features are lagged a day to avoid look-ahead bias, and the model is retrained every month on an expanding window.</p>
+                        <p class="stack">Python, hmmlearn, PyPortfolioOpt, scikit-learn, pandas, Yahoo Finance data</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/Portfolio-Optimizer" target="_blank" rel="noopener">View the optimizer on GitHub<span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                    </div>
+                    <details class="evidence-wrap" open>
+                        <summary>Show the backtest results</summary>
+                        <figure class="evidence">
                     <figcaption class="evidence-title">Walk-forward backtest, 2013 to 2026</figcaption>
                     <table class="compare">
                         <thead>
@@ -259,26 +267,25 @@
                     </table>
                     <p class="evidence-note">SPY, TLT, GLD and SHV, rebalanced monthly. The model was in its turbulent state about 35% of the time.</p>
                 </figure>
-            </article>
+                    </details>
+                </article>
 
-            <!-- OLA Checker -->
-            <article class="feature">
-                <div class="feature-text">
-                    <p class="feature-context">Built on my own initiative at Nestlé Philippines, 2026</p>
-                    <h3>Online Availability Checker</h3>
-                    <p>
-                        While visiting another department I noticed someone checking 132 product listings by hand
-                        every day. I built a tool that reads the stock status of 254 listings across Lazada, Shopee and
-                        TikTok Shop and writes an Excel report in which every verdict records its evidence.
-                    </p>
-                    <ul class="feature-points">
-                        <li><strong>Nearly doubled coverage</strong> while finishing a full run of 254 listings in 11 minutes.</li>
-                        <li>Guarded accuracy with a regression test against listings of known status, and wrote a 26-page manual so the team can run it without me. Now in user acceptance testing.</li>
-                    </ul>
-                    <p class="stack">Python, Playwright, openpyxl</p>
-                </div>
-
-                <figure class="evidence">
+                <article class="card fcard" data-slide>
+                    <div class="fcard-text">
+                        <p class="card-meta"><span class="tag">Automation</span><span>Built on my own initiative at Nestlé Philippines, 2026</span></p>
+                        <h3>Online Availability Checker</h3>
+                        <p class="card-summary">While visiting another department I noticed someone checking 132 product listings by hand every day. I built a tool that reads stock status across Lazada, Shopee and TikTok Shop and writes an Excel report in which every verdict records its evidence.</p>
+                        <dl class="stats">
+                            <div><dt>listings checked, nearly double the manual coverage</dt><dd>254</dd></div>
+                            <div><dt>for a full run across 3 marketplaces</dt><dd>11 min</dd></div>
+                            <div><dt>of handover manual, so the team can run it without me</dt><dd>26 pages</dd></div>
+                        </dl>
+                        <p class="card-extra">Accuracy is guarded by a regression test against listings of known status. Now in user acceptance testing.</p>
+                        <p class="stack">Python, Playwright, openpyxl</p>
+                    </div>
+                    <details class="evidence-wrap" open>
+                        <summary>Show the time comparison</summary>
+                        <figure class="evidence">
                     <figcaption class="evidence-title">Time to check one listing</figcaption>
                     <div class="bars" role="img" aria-label="Checking one listing took about 28 seconds by hand and 2.6 seconds with the tool.">
                         <div class="bars-row">
@@ -294,25 +301,25 @@
                     </div>
                     <p class="evidence-note">Measured on a full run. About eleven times faster per listing.</p>
                 </figure>
-            </article>
+                    </details>
+                </article>
 
-            <!-- PhilLexBot -->
-            <article class="feature">
-                <div class="feature-text">
-                    <p class="feature-context">Undergraduate thesis, defended, team of four</p>
-                    <h3>PhilLexBot: a chatbot for Philippine legal contracts</h3>
-                    <p>
-                        Upload a contract and ask questions about it. The bot answers strictly from the clauses it
-                        retrieves and cites the section each answer came from. I handled most of the testing.
-                    </p>
-                    <ul class="feature-points">
-                        <li><strong>0.81 retrieval precision</strong> across 75 questions on 5 contract types, evaluated with RAGAS.</li>
-                        <li>Traced the weaker answer scores to the privacy-masking trade-off. Users rated clarity <strong>4.21 out of 5</strong>.</li>
-                    </ul>
-                    <p class="stack">Python, Gemini, Qdrant, LangChain, RAGAS, Microsoft Presidio</p>
-                </div>
-
-                <figure class="evidence">
+                <article class="card fcard" data-slide>
+                    <div class="fcard-text">
+                        <p class="card-meta"><span class="tag">AI</span><span>Undergraduate thesis, defended, team of four</span></p>
+                        <h3>PhilLexBot: a chatbot for Philippine legal contracts</h3>
+                        <p class="card-summary">Upload a contract and ask questions about it. The bot answers strictly from the clauses it retrieves and cites the section each answer came from. I handled most of the testing.</p>
+                        <dl class="stats">
+                            <div><dt>retrieval precision, evaluated with RAGAS</dt><dd>0.81</dd></div>
+                            <div><dt>questions across 5 contract types</dt><dd>75</dd></div>
+                            <div><dt>clarity rating from users</dt><dd>4.21 / 5</dd></div>
+                        </dl>
+                        <p class="card-extra">I traced the weaker answer scores to the privacy-masking trade-off.</p>
+                        <p class="stack">Python, Gemini, Qdrant, LangChain, RAGAS, Microsoft Presidio</p>
+                    </div>
+                    <details class="evidence-wrap" open>
+                        <summary>Show how a question gets answered</summary>
+                        <figure class="evidence">
                     <figcaption class="evidence-title">How a question gets answered</figcaption>
                     <ol class="steps">
                         <li><strong>Mask</strong><span>Personal data is hidden with Microsoft Presidio before anything else sees the contract.</span></li>
@@ -321,112 +328,123 @@
                         <li><strong>Answer</strong><span>The reply uses only those clauses and cites the section.</span></li>
                     </ol>
                 </figure>
-            </article>
+                    </details>
+                </article>
 
-            <!-- More projects -->
-            <div class="more">
+            </div>
+                <div class="carousel-nav">
+                    <button type="button" class="icon-btn carousel-btn" data-prev aria-label="Previous project"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+                    <span class="carousel-dots" data-dots aria-hidden="true"></span>
+                    <span class="carousel-count num" data-count aria-live="polite"></span>
+                    <button type="button" class="icon-btn carousel-btn" data-next aria-label="Next project"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+        </div>
+
+        <div class="more">
+            <div class="more-head">
                 <h3 class="more-title">More projects</h3>
+                <div class="filters" role="group" aria-label="Filter projects by type">
+                    <button type="button" class="chip-btn" data-filter="all" aria-pressed="true">All</button>
+                    <button type="button" class="chip-btn" data-filter="cloud" aria-pressed="false">Cloud &amp; web</button>
+                    <button type="button" class="chip-btn" data-filter="data" aria-pressed="false">Data &amp; AI</button>
+                    <button type="button" class="chip-btn" data-filter="course" aria-pressed="false">Coursework &amp; design</button>
+                </div>
+            </div>
+            <p class="sr-only" id="filterStatus" role="status"></p>
 
-                <h4 class="more-group">Cloud and full-stack</h4>
-                <ul class="plist">
-                    <li class="prow">
-                        <div class="prow-title">Neon Pulse: highly available AWS architecture</div>
-                        <div class="prow-desc">
-                            <p>The brief asked for a single web server. I deployed two to four across three Availability Zones behind a load balancer, with CloudWatch alarms driving the scaling, then terminated a live instance to confirm the site kept serving. Final project, perfect score.</p>
-                            <p class="stack">AWS VPC, EC2, ALB, Auto Scaling, CloudWatch</p>
-                        </div>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Smart Inventory &amp; Financial Audit System</div>
-                        <div class="prow-desc">
-                            <p>A supply-chain app that sells perishable stock first-expired, first-out. Stock movements and audit logs are written in one transaction, so they can't drift apart. Includes a live dashboard and Excel audit exports.</p>
-                            <p class="stack">Java, Spring Boot, MySQL, Chart.js, SheetJS</p>
-                        </div>
-                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/InventorySystem" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Smart Inventory System (opens in a new tab)</span></a>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Condo Review Platform</div>
-                        <div class="prow-desc">
-                            <p>A site for reviewing condominiums, with accounts, search filters and ratings. Query optimization cut page load time by 34%.</p>
-                            <p class="stack">Express.js, MongoDB, JavaScript, Vercel</p>
-                        </div>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">E-Commerce Cookie Store</div>
-                        <div class="prow-desc">
-                            <p>An online store with ordering, order tracking and online payments.</p>
-                            <p class="stack">Next.js, Medusa.js, MongoDB</p>
-                        </div>
-                    </li>
-                </ul>
-
-                <h4 class="more-group">Data, machine learning and automation</h4>
-                <ul class="plist">
-                    <li class="prow">
-                        <div class="prow-title">Steam Platform Analytics Dashboard</div>
-                        <div class="prow-desc">
-                            <p>A web app for exploring gaming habits on Steam: games played, hours logged and platform use, sliced with OLAP operations that made exploring the data about 40% faster.</p>
-                            <p class="stack">SQL, Supabase, JavaScript, HTML/CSS</p>
-                        </div>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Household Income Classification</div>
-                        <div class="prow-desc">
-                            <p>Compared k-nearest neighbors, logistic regression and Naive Bayes on accuracy, precision and recall. KNN came out best at 84% accuracy.</p>
-                            <p class="stack">Python, scikit-learn, pandas</p>
-                        </div>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">The Watchmen: enlistment monitor</div>
-                        <div class="prow-desc">
-                            <p>A Discord bot that watches DLSU course availability and alerts students the moment a slot opens.</p>
-                            <p class="stack">Python, Discord API</p>
-                        </div>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Personal AI automations</div>
-                        <div class="prow-desc">
-                            <p>Claude scans Philippine FMCG market developments for me and keeps a Notion tracker of internship and graduate roles up to date.</p>
-                            <p class="stack">Claude, Notion</p>
-                        </div>
-                    </li>
-                </ul>
-
-                <h4 class="more-group">Coursework and design</h4>
-                <ul class="plist">
-                    <li class="prow">
-                        <div class="prow-title">Java Vending Machine</div>
-                        <div class="prow-desc">
-                            <p>A desktop vending machine simulator with sound, a maintenance mode and a record of every transaction.</p>
-                            <p class="stack">Java, Swing, MVC</p>
-                        </div>
-                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/vending-machine-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Java Vending Machine (opens in a new tab)</span></a>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Messenger Simulator</div>
-                        <div class="prow-desc">
-                            <p>A terminal messaging app in about 1,700 lines of C: accounts with password recovery, private and group messages, announcements and an admin module.</p>
-                            <p class="stack">C</p>
-                        </div>
-                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/messenger-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Messenger Simulator (opens in a new tab)</span></a>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Terminal Alien Shooter</div>
-                        <div class="prow-desc">
-                            <p>My first C project: a turn-based shooter where DLSU defends its border from three rival schools. Random spawns, and 100 points to win.</p>
-                            <p class="stack">C</p>
-                        </div>
-                        <a class="link-ext prow-link" href="https://github.com/karlOrdinario/alien-shooter-game" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Terminal Alien Shooter (opens in a new tab)</span></a>
-                    </li>
-                    <li class="prow">
-                        <div class="prow-title">Health Card Mobile Interface</div>
-                        <div class="prow-desc">
-                            <p>A freelance mobile app prototype that links a physical medical card to a patient's digital history. Approved by the client.</p>
-                            <p class="stack">Figma</p>
-                        </div>
-                        <a class="link-ext prow-link" href="https://www.figma.com/proto/MvYYHXB99CEejUsWrHV52h/Kapwakard-Draft?node-id=77-211&p=f&t=vPYhg0sK23iMa078-1&scaling=scale-down&content-scaling=fixed&page-id=77%3A137&starting-point-node-id=77%3A211&show-proto-sidebar=1" target="_blank" rel="noopener">Prototype<span aria-hidden="true">↗</span><span class="sr-only">: Health Card Mobile Interface (opens in a new tab)</span></a>
-                    </li>
-                </ul>
+            <div class="carousel carousel-more" data-carousel>
+                <div class="carousel-track" role="region" aria-label="More projects">
+                    <article class="card pcard" data-cat="cloud" data-slide>
+                        <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
+                        <h4>Neon Pulse: highly available AWS architecture</h4>
+                        <p class="pcard-desc">The brief asked for a single web server. I deployed two to four across three Availability Zones behind a load balancer, scaled by CloudWatch alarms, then terminated a live instance to confirm the site kept serving.</p>
+                        <p class="pcard-win">Final project, perfect score</p>
+                        <p class="stack">AWS VPC, EC2, ALB, Auto Scaling, CloudWatch</p>
+                    </article>
+                    <article class="card pcard" data-cat="cloud" data-slide>
+                        <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
+                        <h4>Smart Inventory &amp; Financial Audit System</h4>
+                        <p class="pcard-desc">A supply-chain app that sells perishable stock first-expired, first-out, with a live dashboard and Excel audit exports.</p>
+                        <p class="pcard-win">Stock movements and audit logs are written in one transaction, so they can't drift apart</p>
+                        <p class="stack">Java, Spring Boot, MySQL, Chart.js, SheetJS</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/InventorySystem" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Smart Inventory &amp; Financial Audit System (opens in a new tab)</span></a>
+                    </article>
+                    <article class="card pcard" data-cat="cloud" data-slide>
+                        <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
+                        <h4>Condo Review Platform</h4>
+                        <p class="pcard-desc">A site for reviewing condominiums, with accounts, search filters and ratings.</p>
+                        <p class="pcard-win">34% faster page loads after query optimization</p>
+                        <p class="stack">Express.js, MongoDB, JavaScript, Vercel</p>
+                    </article>
+                    <article class="card pcard" data-cat="cloud" data-slide>
+                        <p class="card-meta"><span class="tag">Cloud &amp; web</span></p>
+                        <h4>E-Commerce Cookie Store</h4>
+                        <p class="pcard-desc">An online store with ordering, order tracking and online payments.</p>
+                        <p class="stack">Next.js, Medusa.js, MongoDB</p>
+                    </article>
+                    <article class="card pcard" data-cat="data" data-slide>
+                        <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
+                        <h4>Steam Platform Analytics Dashboard</h4>
+                        <p class="pcard-desc">A web app for exploring gaming habits on Steam: games played, hours logged and platform use, sliced with OLAP operations.</p>
+                        <p class="pcard-win">About 40% faster data exploration</p>
+                        <p class="stack">SQL, Supabase, JavaScript, HTML/CSS</p>
+                    </article>
+                    <article class="card pcard" data-cat="data" data-slide>
+                        <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
+                        <h4>Household Income Classification</h4>
+                        <p class="pcard-desc">Compared k-nearest neighbors, logistic regression and Naive Bayes on accuracy, precision and recall.</p>
+                        <p class="pcard-win">KNN came out best at 84% accuracy</p>
+                        <p class="stack">Python, scikit-learn, pandas</p>
+                    </article>
+                    <article class="card pcard" data-cat="data" data-slide>
+                        <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
+                        <h4>The Watchmen: enlistment monitor</h4>
+                        <p class="pcard-desc">A Discord bot that watches DLSU course availability and alerts students the moment a slot opens.</p>
+                        <p class="stack">Python, Discord API</p>
+                    </article>
+                    <article class="card pcard" data-cat="data" data-slide>
+                        <p class="card-meta"><span class="tag">Data &amp; AI</span></p>
+                        <h4>Personal AI automations</h4>
+                        <p class="pcard-desc">Claude scans Philippine FMCG market developments for me and keeps a Notion tracker of internship and graduate roles up to date.</p>
+                        <p class="stack">Claude, Notion</p>
+                    </article>
+                    <article class="card pcard" data-cat="course" data-slide>
+                        <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
+                        <h4>Java Vending Machine</h4>
+                        <p class="pcard-desc">A desktop vending machine simulator with sound, a maintenance mode and a record of every transaction.</p>
+                        <p class="stack">Java, Swing, MVC</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/vending-machine-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Java Vending Machine (opens in a new tab)</span></a>
+                    </article>
+                    <article class="card pcard" data-cat="course" data-slide>
+                        <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
+                        <h4>Messenger Simulator</h4>
+                        <p class="pcard-desc">A terminal messaging app: accounts with password recovery, private and group messages, announcements and an admin module.</p>
+                        <p class="pcard-win">About 1,700 lines of C</p>
+                        <p class="stack">C</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/messenger-simulator" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Messenger Simulator (opens in a new tab)</span></a>
+                    </article>
+                    <article class="card pcard" data-cat="course" data-slide>
+                        <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
+                        <h4>Terminal Alien Shooter</h4>
+                        <p class="pcard-desc">My first C project: a turn-based shooter where DLSU defends its border from three rival schools. Random spawns, and 100 points to win.</p>
+                        <p class="stack">C</p>
+                        <a class="link-ext" href="https://github.com/karlOrdinario/alien-shooter-game" target="_blank" rel="noopener">GitHub<span aria-hidden="true">↗</span><span class="sr-only">: Terminal Alien Shooter (opens in a new tab)</span></a>
+                    </article>
+                    <article class="card pcard" data-cat="course" data-slide>
+                        <p class="card-meta"><span class="tag">Coursework &amp; design</span></p>
+                        <h4>Health Card Mobile Interface</h4>
+                        <p class="pcard-desc">A freelance mobile app prototype that links a physical medical card to a patient's digital history.</p>
+                        <p class="pcard-win">Approved by the client</p>
+                        <p class="stack">Figma</p>
+                        <a class="link-ext" href="https://www.figma.com/proto/MvYYHXB99CEejUsWrHV52h/Kapwakard-Draft?node-id=77-211&p=f&t=vPYhg0sK23iMa078-1&scaling=scale-down&content-scaling=fixed&page-id=77%3A137&starting-point-node-id=77%3A211&show-proto-sidebar=1" target="_blank" rel="noopener">Prototype<span aria-hidden="true">↗</span><span class="sr-only">: Health Card Mobile Interface (opens in a new tab)</span></a>
+                    </article>
+                </div>
+                <div class="carousel-nav">
+                    <button type="button" class="icon-btn carousel-btn" data-prev aria-label="Previous project"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+                    <span class="carousel-dots" data-dots aria-hidden="true"></span>
+                    <span class="carousel-count num" data-count aria-live="polite"></span>
+                    <button type="button" class="icon-btn carousel-btn" data-next aria-label="Next project"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
             </div>
         </div>
     </div>
@@ -541,32 +559,44 @@
             <dl class="skills">
                 <div>
                     <dt>Analytics</dt>
-                    <dd>Power BI (DAX, Power Query), Advanced Excel, PowerPoint, SQL, pricing and scenario analysis, market and competitor analysis, statistical and time-series analysis, market research synthesis (Nielsen, Kantar, PSA)</dd>
+                    <dd><ul class="chips"><li>Power BI (DAX, Power Query)</li><li>Advanced Excel</li><li>PowerPoint</li><li>SQL</li><li>pricing and scenario analysis</li><li>market and competitor analysis</li><li>statistical and time-series analysis</li><li>market research synthesis (Nielsen, Kantar, PSA)</li></ul></dd>
                 </div>
                 <div>
                     <dt>Programming</dt>
-                    <dd>Python (pandas, NumPy, scikit-learn, Playwright, openpyxl), SQL, Java, JavaScript, TypeScript, Go, C, C++, HTML/CSS</dd>
+                    <dd><ul class="chips"><li>Python (pandas, NumPy, scikit-learn, Playwright, openpyxl)</li><li>SQL</li><li>Java</li><li>JavaScript</li><li>TypeScript</li><li>Go</li><li>C</li><li>C++</li><li>HTML/CSS</li></ul></dd>
                 </div>
                 <div>
                     <dt>Quantitative finance</dt>
-                    <dd>Monte Carlo simulation, derivatives pricing, VaR and CVaR, DCF valuation and financial modelling, portfolio construction and backtesting, SciPy, hmmlearn, PyPortfolioOpt, Streamlit</dd>
+                    <dd><ul class="chips"><li>Monte Carlo simulation</li><li>derivatives pricing</li><li>VaR and CVaR</li><li>DCF valuation and financial modelling</li><li>portfolio construction and backtesting</li><li>SciPy</li><li>hmmlearn</li><li>PyPortfolioOpt</li><li>Streamlit</li></ul></dd>
                 </div>
                 <div>
                     <dt>AI and LLMs</dt>
-                    <dd>Retrieval-augmented generation, Gemini API, LangChain, Qdrant, RAGAS evaluation, Microsoft Presidio, Claude Code, prompt engineering</dd>
+                    <dd><ul class="chips"><li>Retrieval-augmented generation</li><li>Gemini API</li><li>LangChain</li><li>Qdrant</li><li>RAGAS evaluation</li><li>Microsoft Presidio</li><li>Claude Code</li><li>prompt engineering</li></ul></dd>
                 </div>
                 <div>
                     <dt>Cloud and data</dt>
-                    <dd>AWS (VPC, EC2, Application Load Balancer, Auto Scaling, CloudWatch, S3, RDS, Lambda, DynamoDB), PostgreSQL, MySQL, MongoDB, Supabase, relational schema design, dimensional modelling, OLAP</dd>
+                    <dd><ul class="chips"><li>AWS (VPC, EC2, Application Load Balancer, Auto Scaling, CloudWatch, S3, RDS, Lambda, DynamoDB)</li><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>Supabase</li><li>relational schema design</li><li>dimensional modelling</li><li>OLAP</li></ul></dd>
                 </div>
                 <div>
                     <dt>Software</dt>
-                    <dd>Spring Boot, React, Next.js, Express.js, Git and GitHub, GitHub Actions, pytest, Chart.js, Figma, Vercel</dd>
+                    <dd><ul class="chips"><li>Spring Boot</li><li>React</li><li>Next.js</li><li>Express.js</li><li>Git and GitHub</li><li>GitHub Actions</li><li>pytest</li><li>Chart.js</li><li>Figma</li><li>Vercel</li></ul></dd>
                 </div>
                 <div>
                     <dt>Languages</dt>
-                    <dd>English (full professional proficiency), Filipino (native)</dd>
+                    <dd><ul class="chips"><li>English (full professional proficiency)</li><li>Filipino (native)</li></ul></dd>
                 </div>
+            </dl>
+
+            <h3 class="subhead">Soft skills</h3>
+            <dl class="soft">
+                <div><dt>Consulting</dt><dd>A month of consulting training, plus a year managing corporate relations at Archers Consulting Group.</dd></div>
+                <div><dt>Problem solving</dt><dd>Built a national pricing business case at Nestlé and traced where consumers were trading down.</dd></div>
+                <div><dt>Presentation</dt><dd>Presented to 7 sales and brand teams and defended recommendations under questioning.</dd></div>
+                <div><dt>Negotiation</dt><dd>Pitched 50+ companies and closed ₱300,000+ in sponsorships, negotiating the terms of each.</dd></div>
+                <div><dt>Leadership</dt><dd>Chief of Staff of the University Student Government, and manager and director roles in two more organizations.</dd></div>
+                <div><dt>Communication</dt><dd>Wrote 30 to 40 page market research reports and a 26-page handover manual.</dd></div>
+                <div><dt>Relationship building</dt><dd>Built a partnership pipeline of 500+ organizations and trained my successors.</dd></div>
+                <div><dt>Stakeholder management</dt><dd>Worked with sales teams, brand managers and department leadership, and escalated data errors to vendors until they reissued corrected figures.</dd></div>
             </dl>
         </div>
     </div>
@@ -583,7 +613,7 @@
             <div class="about-text">
                 <p>
                     I'm Karl, based in Makati. I study Computer Science at De La Salle University, majoring in Software
-                    Technology, and I'm on track to graduate in February 2027 as a Dean's List awardee.
+                    Technology, and I'm on track to graduate in February 2027.
                 </p>
                 <p>
                     Most of what I do sits between a business question and the data that can answer it. At Nestlé that meant

@@ -75,6 +75,96 @@ menuToggle.addEventListener('click', () => mobileMenu.hidden ? openMobileMenu() 
 mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMobileMenu(false)));
 window.matchMedia('(min-width: 860px)').addEventListener('change', e => { if (e.matches) closeMobileMenu(false); });
 
+// ─── SCROLL PROGRESS ────────────────────────────────────────────
+const scrollProgress = document.getElementById('scrollProgress');
+function updateScrollProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+}
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+window.addEventListener('resize', updateScrollProgress);
+updateScrollProgress();
+
+// ─── PROJECT CAROUSELS ──────────────────────────────────────────
+// On wide screens the track is a plain grid and none of this is visible.
+// On phones it becomes a swipeable, scroll-snapping row with buttons.
+const carousels = [...document.querySelectorAll('[data-carousel]')].map(el => {
+    const track = el.querySelector('.carousel-track');
+    const prev = el.querySelector('[data-prev]'), next = el.querySelector('[data-next]');
+    const dots = el.querySelector('[data-dots]'), count = el.querySelector('[data-count]');
+    let index = 0, ticking = false;
+
+    const slides = () => [...track.querySelectorAll('[data-slide]')].filter(c => !c.hidden);
+    const scrollable = () => track.scrollWidth > track.clientWidth + 4;
+    const offsetOf = slide => slide.offsetLeft - track.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft || 0);
+
+    function render() {
+        const list = slides();
+        index = Math.min(index, Math.max(0, list.length - 1));
+        dots.innerHTML = list.map((_, i) => `<i${i === index ? ' class="is-on"' : ''}></i>`).join('');
+        count.textContent = list.length ? `${index + 1} of ${list.length}` : '';
+        prev.disabled = index === 0;
+        next.disabled = index >= list.length - 1;
+        // only a scrolling track needs to be a keyboard stop
+        if (scrollable()) track.setAttribute('tabindex', '0'); else track.removeAttribute('tabindex');
+    }
+    function sync() {
+        ticking = false;
+        const list = slides();
+        if (!list.length) return;
+        let best = 0, bestDist = Infinity;
+        list.forEach((slide, i) => {
+            const d = Math.abs(offsetOf(slide) - track.scrollLeft);
+            if (d < bestDist) { bestDist = d; best = i; }
+        });
+        // the last card can never reach the left edge, so treat the scroll end as "last"
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) best = list.length - 1;
+        if (best !== index) { index = best; render(); }
+    }
+    function go(step) {
+        const list = slides();
+        const target = list[Math.max(0, Math.min(list.length - 1, index + step))];
+        if (target) track.scrollTo({ left: offsetOf(target), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    }
+    track.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(sync); } }, { passive: true });
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    window.addEventListener('resize', render);
+    render();
+    return { el, track, reset() { index = 0; track.scrollLeft = 0; render(); } };
+});
+
+// Evidence panels: always open on wide screens, tucked behind a tap on phones
+// so each carousel card stays about one screen tall.
+(function evidencePanels() {
+    const panels = document.querySelectorAll('.evidence-wrap');
+    const phone = window.matchMedia('(max-width: 759px)');
+    const apply = () => panels.forEach(d => { d.open = !phone.matches; });
+    phone.addEventListener('change', apply);
+    apply();
+})();
+
+// ─── PROJECT FILTERS ────────────────────────────────────────────
+(function projectFilters() {
+    const buttons = document.querySelectorAll('.chip-btn[data-filter]');
+    const cards = document.querySelectorAll('.pcard[data-cat]');
+    const status = document.getElementById('filterStatus');
+    const moreCarousel = carousels.find(c => c.el.classList.contains('carousel-more'));
+
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+        let shown = 0;
+        cards.forEach(card => {
+            const match = filter === 'all' || card.dataset.cat === filter;
+            card.hidden = !match;
+            if (match) shown++;
+        });
+        status.textContent = `Showing ${shown} project${shown === 1 ? '' : 's'}: ${btn.textContent.trim()}.`;
+        if (moreCarousel) moreCarousel.reset();
+    }));
+})();
+
 // ─── HERO · LIVE MONTE CARLO ────────────────────────────────────
 // Simulates geometric Brownian motion paths, prices a European call from
 // them, and checks the answer against the Black–Scholes closed form.
@@ -157,6 +247,9 @@ const sim = (function heroSim() {
         const css = getComputedStyle(root);
         const color = name => css.getPropertyValue(name).trim();
         const accent = color('--accent'), faint = color('--text-3'), mid = color('--text-2'), soft = color('--accent-soft');
+        const signature = ctx.createLinearGradient(0, 0, w, 0);
+        signature.addColorStop(0, color('--g1')); signature.addColorStop(0.3, color('--gw'));
+        signature.addColorStop(0.64, color('--g2')); signature.addColorStop(1, color('--g3'));
 
         const padX = 10, padTop = 26, padBottom = 12;
         const { paths, cols, p5, p50, p95, lo, hi } = state;
@@ -191,7 +284,7 @@ const sim = (function heroSim() {
         }
 
         // median
-        ctx.globalAlpha = 1; ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+        ctx.globalAlpha = 1; ctx.strokeStyle = signature; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
         ctx.beginPath();
         ctx.moveTo(x(0), y(p50[0]));
         for (let j = 1; j <= last; j++) ctx.lineTo(x(j), y(p50[j]));
@@ -288,7 +381,7 @@ function rainEmoji(emojis, count = 34) {
 function confettiBurst(count = 80) {
     if (prefersReducedMotion) return;
     const layer = document.getElementById('confettiLayer');
-    const colors = ['#FF6A3A', '#FFC978', '#3ECF8E', '#F4F1EA', '#D31145'];
+    const colors = ['#34D399', '#FACC15', '#60A5FA', '#F4F1EA', '#D31145'];
     for (let i = 0; i < count; i++) {
         const bit = document.createElement('div');
         bit.className = 'confetti-bit';
@@ -403,7 +496,7 @@ console.log(
     '  · ↑↑↓↓←→←→BA  → arcade mode (on a phone: swipe it, then tap twice)\n' +
     '  · triple-click the logo  → party\n\n' +
     'Let\'s talk: karlandreiordinario@gmail.com',
-    'font-family:monospace; font-size:28px; font-weight:bold; color:#FF6A3A;',
+    'font-family:monospace; font-size:28px; font-weight:bold; color:#34D399;',
     'font-family:monospace; font-size:12px; color:#9C9A94;'
 );
 
@@ -475,7 +568,7 @@ function processCommand(cmd) {
 
     const commands = {
         'help': `Available commands:<br>&nbsp;· <span class="term-white">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;who I am<br>&nbsp;· <span class="term-white">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tech stack<br>&nbsp;· <span class="term-white">projects</span> &nbsp;&nbsp;my work<br>&nbsp;· <span class="term-white">internship</span> Nestlé PH<br>&nbsp;· <span class="term-white">simulate</span> &nbsp;&nbsp;price an option, live<br>&nbsp;· <span class="term-white">contact</span> &nbsp;&nbsp;&nbsp;reach me<br>&nbsp;· <span class="term-white">resume</span> &nbsp;&nbsp;&nbsp;&nbsp;open my resume<br>&nbsp;· <span class="term-white">github</span> &nbsp;&nbsp;&nbsp;&nbsp;open GitHub<br>&nbsp;· <span class="term-white">hire</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;why me<br>&nbsp;· <span class="term-white">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear terminal<br>&nbsp;· <span class="term-white">exit</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close terminal<br><span class="term-dim">...and a few undocumented ones. Explore.</span>`,
-        'about': `Karl Andrei Ordinario. Final-year CS @ DLSU, Dean's List.<br>Data analyst · software engineer · quant finance builder.<br>Shopper Insights Analytics Intern @ Nestlé PH (Apr–Aug 2026).<br>Graduating February 2027. Open to what's next.`,
+        'about': `Karl Andrei Ordinario. Final-year CS @ DLSU Manila.<br>Data analyst · software engineer · quant finance builder.<br>Shopper Insights Analytics Intern @ Nestlé PH (Apr–Aug 2026).<br>Graduating February 2027. Open to what's next.`,
         'stack': `Analytics: Power BI (DAX) · Power Query · Advanced Excel · SQL<br>Languages: Python · Java · JavaScript · TypeScript · Go · C<br>Quant: NumPy · SciPy · hmmlearn · PyPortfolioOpt · Streamlit<br>AI: RAG · Gemini · LangChain · Qdrant · RAGAS<br>Cloud: AWS (VPC, EC2, ALB, Auto Scaling, CloudWatch)<br>Web: React · Next.js · Express · Spring Boot · PostgreSQL`,
         'projects': `Highlights:<br>&nbsp;· mcquant: Monte Carlo pricing, risk &amp; valuation (299 tests)<br>&nbsp;· Regime-switching portfolio model (HMM, halved drawdown)<br>&nbsp;· Online Availability Checker (28s → 2.6s per listing)<br>&nbsp;· PhilLexBot: legal contract RAG chatbot (thesis)<br>&nbsp;· Neon Pulse: auto-scaling AWS architecture<br>&nbsp;· Smart Inventory System (Spring Boot, FEFO, ACID)<br><span class="term-hl">Scroll to Work for all 16 ↑</span>`,
         'internship': `Nestlé Philippines · Shopper Insights Analytics Intern<br>Apr 2026 – Aug 2026<br>Built a national pricing business case, presented to 7 sales<br>and brand teams, and prototyped a Power BI model that cut<br>30-minute filters down to seconds.<br>Also built the OLA Checker for another department, unprompted.`,
