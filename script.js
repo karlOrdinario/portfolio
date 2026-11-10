@@ -1,32 +1,9 @@
 // ═══════════════════════════════════════════════════════════════
-// KO. portfolio v2 — animation engines & easter eggs
+// KO. portfolio v3 — theme, navigation, live simulation & easter eggs
 // ═══════════════════════════════════════════════════════════════
 
-const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+const root = document.documentElement;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// ─── PRELOADER ──────────────────────────────────────────────────
-(function preloader() {
-    const pre = document.getElementById('preloader');
-    const fill = document.getElementById('preloaderFill');
-    const pct = document.getElementById('preloaderPct');
-    let progress = 0;
-
-    const tick = setInterval(() => {
-        progress += Math.random() * 18 + 6;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(tick);
-            setTimeout(() => {
-                pre.classList.add('done');
-                document.body.classList.add('loaded');
-                setTimeout(() => pre.remove(), 800);
-            }, 350);
-        }
-        fill.style.width = progress + '%';
-        pct.textContent = Math.floor(progress);
-    }, 110);
-})();
 
 // ─── FOOTER YEAR ────────────────────────────────────────────────
 document.getElementById('footer-year').textContent = new Date().getFullYear();
@@ -35,221 +12,257 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 (function greeting() {
     const h = new Date().getHours();
     const el = document.getElementById('heroGreeting');
-    const base = 'Nestlé PH Intern thru Aug 2026 · DLSU CS · Manila';
+    const base = el.textContent;
     const day = h < 5 ? 'Burning the midnight oil? Same.' :
-                h < 12 ? 'Good morning' :
-                h < 18 ? 'Good afternoon' : 'Good evening';
-    el.textContent = `${day} — ${base}`;
+                h < 12 ? 'Good morning.' :
+                h < 18 ? 'Good afternoon.' : 'Good evening.';
+    el.textContent = `${day} ${base}`;
 })();
 
-// ─── SCROLL PROGRESS BAR ────────────────────────────────────────
-const progressBar = document.getElementById('scrollProgress');
-window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (window.scrollY / Math.max(1, max)) * 100 + '%';
-}, { passive: true });
+// ─── THEME TOGGLE ───────────────────────────────────────────────
+const themeToggle = document.getElementById('themeToggle');
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
-// ─── NAV SHRINK ON SCROLL ───────────────────────────────────────
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-}, { passive: true });
-
-// ─── CUSTOM CURSOR ──────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-
-if (isFinePointer) {
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-        mx = e.clientX; my = e.clientY;
-        cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-    });
-    (function animRing() {
-        rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
-        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-        requestAnimationFrame(animRing);
-    })();
-    document.querySelectorAll('a, button, .skill-tag, .wwm-card, .project-card, input').forEach(el => {
-        el.addEventListener('mouseenter', () => { cursor.classList.add('hovering'); ring.classList.add('hovering'); });
-        el.addEventListener('mouseleave', () => { cursor.classList.remove('hovering'); ring.classList.remove('hovering'); });
-    });
+function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', theme === 'dark' ? '#0F1113' : '#F8F8F6');
 }
+applyTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
 
-// ─── SECTION TITLE CHAR SPLIT ───────────────────────────────────
-document.querySelectorAll('[data-split]').forEach(el => {
-    const text = el.textContent;
-    el.textContent = '';
-    el.setAttribute('aria-label', text);
-    [...text].forEach((ch, i) => {
-        const span = document.createElement('span');
-        span.className = 'char';
-        span.style.transitionDelay = (i * 40) + 'ms';
-        span.textContent = ch === ' ' ? ' ' : ch;
-        span.setAttribute('aria-hidden', 'true');
-        el.appendChild(span);
-    });
+themeToggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('ko-theme', next); } catch (e) { /* private mode: theme just won't persist */ }
 });
-
-// ─── SCROLL REVEAL ──────────────────────────────────────────────
-const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('visible'), 70 * (i % 4));
-            revealObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-document.querySelectorAll('.reveal, .section-header').forEach(el => revealObserver.observe(el));
 
 // ─── NAV ACTIVE STATE ───────────────────────────────────────────
-const navLinks = document.querySelectorAll('.nav-links a');
+const navLinks = document.querySelectorAll('.nav a');
 const sectionObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
-        }
-    });
-}, { threshold: 0.35 });
-document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
-
-// ─── SCRAMBLE TEXT (rotating roles) ─────────────────────────────
-(function roleRotator() {
-    const el = document.getElementById('roleScramble');
-    const roles = ['Data Analyst', 'Software Engineer', 'ML Practitioner', 'Insights Storyteller', 'Full-Stack Builder', 'Problem Solver'];
-    const chars = '!<>-_\\/[]{}—=+*^?#____';
-    let idx = 0;
-
-    function scrambleTo(newText) {
-        const oldText = el.textContent;
-        const length = Math.max(oldText.length, newText.length);
-        let frame = 0;
-        const queue = [];
-        for (let i = 0; i < length; i++) {
-            const from = oldText[i] || '';
-            const to = newText[i] || '';
-            const start = Math.floor(Math.random() * 24);
-            const end = start + Math.floor(Math.random() * 24);
-            queue.push({ from, to, start, end, char: '' });
-        }
-        function update() {
-            let output = '';
-            let complete = 0;
-            for (const q of queue) {
-                if (frame >= q.end) { complete++; output += q.to; }
-                else if (frame >= q.start) {
-                    if (!q.char || Math.random() < 0.28) q.char = chars[Math.floor(Math.random() * chars.length)];
-                    output += `<span style="opacity:0.5">${q.char}</span>`;
-                } else output += q.from;
-            }
-            el.innerHTML = output;
-            if (complete !== queue.length) { frame++; requestAnimationFrame(update); }
-        }
-        update();
-    }
-
-    if (prefersReducedMotion) return;
-    setInterval(() => {
-        idx = (idx + 1) % roles.length;
-        scrambleTo(roles[idx]);
-    }, 3400);
-})();
-
-// ─── ANIMATED COUNTERS ──────────────────────────────────────────
-const counterObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        const el = entry.target;
-        counterObserver.unobserve(el);
-        const target = parseInt(el.dataset.count, 10);
-        const prefix = el.dataset.prefix || '';
-        const suffix = el.dataset.suffix || '';
-        const duration = 1400;
-        const start = performance.now();
-        function step(now) {
-            const t = Math.min(1, (now - start) / duration);
-            const eased = 1 - Math.pow(1 - t, 3);
-            el.textContent = prefix + Math.round(target * eased) + suffix;
-            if (t < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-    });
-}, { threshold: 0.6 });
-document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
-
-// ─── 3D TILT + SPOTLIGHT ON PROJECT CARDS ───────────────────────
-if (isFinePointer && !prefersReducedMotion) {
-    document.querySelectorAll('[data-tilt]').forEach(card => {
-        card.addEventListener('mousemove', e => {
-            const r = card.getBoundingClientRect();
-            const px = (e.clientX - r.left) / r.width;
-            const py = (e.clientY - r.top) / r.height;
-            card.style.transform = `rotateY(${(px - 0.5) * 7}deg) rotateX(${(0.5 - py) * 7}deg) translateZ(0)`;
-            card.style.setProperty('--mx', px * 100 + '%');
-            card.style.setProperty('--my', py * 100 + '%');
+        navLinks.forEach(link => {
+            const on = link.getAttribute('href') === '#' + entry.target.id;
+            link.classList.toggle('active', on);
+            if (on) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current');
         });
-        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
     });
-}
-
-// ─── MAGNETIC ELEMENTS ──────────────────────────────────────────
-if (isFinePointer && !prefersReducedMotion) {
-    document.querySelectorAll('[data-magnetic]').forEach(btn => {
-        btn.addEventListener('mousemove', e => {
-            const r = btn.getBoundingClientRect();
-            btn.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.28}px, ${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
-        });
-        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
-    });
-}
+}, { rootMargin: '-35% 0px -60% 0px' });
+document.querySelectorAll('main section[id]').forEach(s => sectionObserver.observe(s));
 
 // ─── MOBILE MENU ────────────────────────────────────────────────
-const hamburger = document.getElementById('navHamburger');
+const menuToggle = document.getElementById('menuToggle');
 const mobileMenu = document.getElementById('mobileMenu');
-const mobileClose = document.getElementById('mobileMenuClose');
+const pageRegions = [document.getElementById('main'), document.querySelector('.site-footer'), document.getElementById('terminalFab')];
 
-function openMobileMenu()  { mobileMenu.classList.add('open'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeMobileMenu() { mobileMenu.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
-
-hamburger.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu());
-mobileClose.addEventListener('click', closeMobileMenu);
-
-let touchStartY = 0;
-mobileMenu.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-mobileMenu.addEventListener('touchend', e => { if (e.changedTouches[0].clientY - touchStartY > 60) closeMobileMenu(); }, { passive: true });
-
-// ─── PROJECT CAROUSEL DOTS (mobile) ─────────────────────────────
-function initCarousel() {
-    const grid = document.querySelector('.projects-grid');
-    const hint = document.getElementById('carouselHint');
-    if (!grid || !hint) return;
-    const cards = grid.querySelectorAll('.project-card');
-    if (!cards.length) return;
-
-    hint.innerHTML = '';
-    cards.forEach((_, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.addEventListener('click', () => cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }));
-        hint.appendChild(dot);
-    });
-    const dots = hint.querySelectorAll('.carousel-dot');
-    grid.addEventListener('scroll', () => {
-        const activeIndex = Math.round(grid.scrollLeft / (cards[0].offsetWidth + 12));
-        dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
-    }, { passive: true });
+function openMobileMenu() {
+    mobileMenu.hidden = false;
+    menuToggle.setAttribute('aria-expanded', 'true');
+    menuToggle.setAttribute('aria-label', 'Close menu');
+    document.body.style.overflow = 'hidden';
+    pageRegions.forEach(el => el.setAttribute('inert', ''));
 }
-if (window.matchMedia('(max-width: 768px)').matches) initCarousel();
-window.addEventListener('resize', () => {
-    if (window.matchMedia('(max-width: 768px)').matches) initCarousel();
-    else document.getElementById('carouselHint').innerHTML = '';
-});
+function closeMobileMenu(returnFocus) {
+    if (mobileMenu.hidden) return;
+    mobileMenu.hidden = true;
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+    pageRegions.forEach(el => el.removeAttribute('inert'));
+    if (returnFocus) menuToggle.focus();
+}
+menuToggle.addEventListener('click', () => mobileMenu.hidden ? openMobileMenu() : closeMobileMenu(true));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMobileMenu(false)));
+window.matchMedia('(min-width: 860px)').addEventListener('change', e => { if (e.matches) closeMobileMenu(false); });
+
+// ─── HERO · LIVE MONTE CARLO ────────────────────────────────────
+// Simulates geometric Brownian motion paths, prices a European call from
+// them, and checks the answer against the Black–Scholes closed form.
+const sim = (function heroSim() {
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const outMc = document.getElementById('simMc');
+    const outBs = document.getElementById('simBs');
+    const outVerdict = document.getElementById('simVerdict');
+    const rerun = document.getElementById('simRerun');
+
+    const N = 2000, STEPS = 120, DRAWN = 30;
+    const S0 = 100, K = 100, R = 0.05, SIGMA = 0.2, T = 1;
+    let state = null, raf = 0, progress = 1;
+
+    function randn() {
+        let u = 0;
+        while (u === 0) u = Math.random();
+        return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random());
+    }
+    function normCdf(x) {
+        // Abramowitz & Stegun 7.1.26
+        const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+        const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
+        return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+    }
+    function blackScholesCall() {
+        const d1 = (Math.log(S0 / K) + (R + SIGMA * SIGMA / 2) * T) / (SIGMA * Math.sqrt(T));
+        const d2 = d1 - SIGMA * Math.sqrt(T);
+        return S0 * normCdf(d1) - K * Math.exp(-R * T) * normCdf(d2);
+    }
+
+    function simulate() {
+        const cols = STEPS + 1;
+        const paths = new Float32Array(N * cols);
+        const dt = T / STEPS;
+        const drift = (R - SIGMA * SIGMA / 2) * dt;
+        const vol = SIGMA * Math.sqrt(dt);
+        const disc = Math.exp(-R * T);
+        let sum = 0, sumSq = 0;
+
+        for (let i = 0; i < N; i++) {
+            let s = S0;
+            paths[i * cols] = s;
+            for (let j = 1; j < cols; j++) {
+                s *= Math.exp(drift + vol * randn());
+                paths[i * cols + j] = s;
+            }
+            const payoff = disc * Math.max(s - K, 0);
+            sum += payoff; sumSq += payoff * payoff;
+        }
+        const mean = sum / N;
+        const se = Math.sqrt((sumSq - N * mean * mean) / (N - 1) / N);
+
+        const p5 = new Float32Array(cols), p50 = new Float32Array(cols), p95 = new Float32Array(cols);
+        const col = new Float32Array(N);
+        const at = q => col[Math.floor(q * (N - 1))];
+        let lo = S0, hi = S0;
+        for (let j = 0; j < cols; j++) {
+            for (let i = 0; i < N; i++) col[i] = paths[i * cols + j];
+            col.sort();
+            p5[j] = at(0.05); p50[j] = at(0.5); p95[j] = at(0.95);
+            if (j === cols - 1) { lo = at(0.01); hi = at(0.99); }
+        }
+        return { paths, cols, p5, p50, p95, lo, hi, mean, se };
+    }
+
+    function draw() {
+        if (!state) return;
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = rect.width, h = rect.height;
+        if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+            canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+
+        const css = getComputedStyle(root);
+        const color = name => css.getPropertyValue(name).trim();
+        const accent = color('--accent'), faint = color('--text-3'), mid = color('--text-2'), soft = color('--accent-soft');
+
+        const padX = 10, padTop = 26, padBottom = 12;
+        const { paths, cols, p5, p50, p95, lo, hi } = state;
+        const x = j => padX + (j / STEPS) * (w - 2 * padX);
+        const y = v => h - padBottom - ((v - lo) / (hi - lo)) * (h - padTop - padBottom);
+        const last = Math.max(1, Math.round(progress * STEPS));
+
+        // strike
+        ctx.save();
+        ctx.setLineDash([4, 4]); ctx.strokeStyle = mid; ctx.globalAlpha = 0.6; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(padX, y(K)); ctx.lineTo(w - padX, y(K)); ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath(); ctx.rect(0, 0, x(last) + 1, h); ctx.clip();
+
+        // band holding 90% of paths
+        ctx.fillStyle = soft;
+        ctx.beginPath();
+        ctx.moveTo(x(0), y(p95[0]));
+        for (let j = 1; j <= last; j++) ctx.lineTo(x(j), y(p95[j]));
+        for (let j = last; j >= 0; j--) ctx.lineTo(x(j), y(p5[j]));
+        ctx.closePath(); ctx.fill();
+
+        // a sample of individual paths
+        ctx.strokeStyle = faint; ctx.lineWidth = 1; ctx.globalAlpha = 0.26;
+        for (let i = 0; i < DRAWN; i++) {
+            ctx.beginPath();
+            ctx.moveTo(x(0), y(paths[i * cols]));
+            for (let j = 1; j <= last; j++) ctx.lineTo(x(j), y(paths[i * cols + j]));
+            ctx.stroke();
+        }
+
+        // median
+        ctx.globalAlpha = 1; ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(x(0), y(p50[0]));
+        for (let j = 1; j <= last; j++) ctx.lineTo(x(j), y(p50[j]));
+        ctx.stroke();
+        ctx.restore();
+
+        // legend
+        ctx.font = '11px "JetBrains Mono", ui-monospace, monospace';
+        ctx.textBaseline = 'middle';
+        let lx = padX;
+        ctx.strokeStyle = accent; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(lx, 13); ctx.lineTo(lx + 14, 13); ctx.stroke();
+        ctx.fillStyle = mid; ctx.fillText('median', lx + 20, 13);
+        lx += 20 + ctx.measureText('median').width + 14;
+        ctx.fillStyle = soft; ctx.fillRect(lx, 8, 14, 10);
+        ctx.fillStyle = mid; ctx.fillText('90% of paths', lx + 20, 13);
+        lx += 20 + ctx.measureText('90% of paths').width + 14;
+        if (lx + 90 < w) {
+            ctx.save();
+            ctx.setLineDash([3, 3]); ctx.strokeStyle = mid; ctx.globalAlpha = 0.7; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(lx, 13); ctx.lineTo(lx + 14, 13); ctx.stroke();
+            ctx.restore();
+            ctx.fillStyle = mid; ctx.fillText('strike', lx + 20, 13);
+        }
+    }
+
+    function report() {
+        const bs = blackScholesCall();
+        const half = 1.96 * state.se;
+        outMc.innerHTML = `${state.mean.toFixed(2)} <small>± ${half.toFixed(2)}</small>`;
+        outBs.textContent = bs.toFixed(2);
+        const inside = Math.abs(state.mean - bs) <= half;
+        outVerdict.classList.toggle('is-in', inside);
+        outVerdict.textContent = inside
+            ? 'The exact price falls inside the simulation\'s 95% interval.'
+            : 'Outside the 95% interval this time. That should happen about 1 run in 20.';
+    }
+
+    function run() {
+        cancelAnimationFrame(raf);
+        state = simulate();
+        if (prefersReducedMotion) { progress = 1; draw(); report(); return; }
+
+        outVerdict.classList.remove('is-in');
+        outVerdict.textContent = 'Simulating…';
+        outMc.textContent = '…';
+        const start = performance.now(), duration = 1500;
+        (function frame(now) {
+            const t = Math.min(1, (now - start) / duration);
+            progress = 1 - Math.pow(1 - t, 3);
+            draw();
+            if (t < 1) raf = requestAnimationFrame(frame);
+            else report();
+        })(start);
+    }
+
+    rerun.addEventListener('click', run);
+    if ('ResizeObserver' in window) new ResizeObserver(() => draw()).observe(canvas);
+    // repaint when the theme or an easter-egg palette changes
+    new MutationObserver(() => requestAnimationFrame(draw)).observe(root, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+
+    run();
+    return { blackScholesCall, randn, S0, K, R, SIGMA, T };
+})();
 
 // ─── TOAST ──────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg, ms = 3200) {
     const t = document.getElementById('toast');
-    t.innerHTML = msg;
+    t.textContent = msg;
     t.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), ms);
@@ -257,6 +270,7 @@ function showToast(msg, ms = 3200) {
 
 // ─── CONFETTI / FALLING TREATS ──────────────────────────────────
 function rainEmoji(emojis, count = 34) {
+    if (prefersReducedMotion) return;
     const layer = document.getElementById('confettiLayer');
     for (let i = 0; i < count; i++) {
         const el = document.createElement('div');
@@ -272,8 +286,9 @@ function rainEmoji(emojis, count = 34) {
     }
 }
 function confettiBurst(count = 80) {
+    if (prefersReducedMotion) return;
     const layer = document.getElementById('confettiLayer');
-    const colors = ['#FF5C28', '#FFC978', '#3ECF8E', '#F4F1EA', '#D31145'];
+    const colors = ['#FF6A3A', '#FFC978', '#3ECF8E', '#F4F1EA', '#D31145'];
     for (let i = 0; i < count; i++) {
         const bit = document.createElement('div');
         bit.className = 'confetti-bit';
@@ -289,42 +304,80 @@ function confettiBurst(count = 80) {
 
 // ─── EASTER EGG 1 · NESTLÉ BREAK MODE ───────────────────────────
 // Trigger: type "nestle" anywhere · terminal command · footer ☕
+const breakMode = document.getElementById('breakMode');
+const breakClose = document.getElementById('breakClose');
 let nestleBuffer = '';
 let breakModeActive = false;
+let breakReturnFocus = null;
 
 function startBreakMode() {
     if (breakModeActive) return;
     breakModeActive = true;
-    document.body.classList.add('nestle-mode');
-    document.getElementById('breakMode').classList.add('active');
+    breakReturnFocus = document.activeElement;
+    root.classList.add('nestle-mode');
+    breakMode.hidden = false;
+    requestAnimationFrame(() => breakMode.classList.add('active'));
+    breakClose.focus();
     rainEmoji(['🍫', '☕', '🥛', '🍪', '🧋'], 44);
     console.log('%cHave a break. 🍫', 'font-size:20px; color:#D31145; font-weight:bold;');
 }
 function endBreakMode() {
+    if (!breakModeActive) return;
     breakModeActive = false;
-    document.getElementById('breakMode').classList.remove('active');
-    setTimeout(() => document.body.classList.remove('nestle-mode'), 400);
-    showToast('Break\'s over — back to the data mines ⛏️');
+    breakMode.classList.remove('active');
+    setTimeout(() => {
+        breakMode.hidden = true;
+        root.classList.remove('nestle-mode');
+    }, 400);
+    if (breakReturnFocus && breakReturnFocus.focus && !breakReturnFocus.closest('[inert]')) breakReturnFocus.focus();
+    showToast('Break\'s over. Back to the data mines ⛏️');
 }
+breakClose.addEventListener('click', endBreakMode);
+document.getElementById('footerEgg').addEventListener('click', startBreakMode);
+breakMode.addEventListener('keydown', e => { if (e.key === 'Tab') e.preventDefault(); }); // one control: keep focus on it
 
 document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key.length !== 1) return;
     nestleBuffer = (nestleBuffer + e.key.toLowerCase()).slice(-6);
     if (nestleBuffer === 'nestle') startBreakMode();
 });
 
 // ─── EASTER EGG 2 · KONAMI ARCADE MODE ──────────────────────────
+// Keyboard: ↑↑↓↓←→←→BA · Touch: swipe ↑↑↓↓←→←→ then tap twice · Terminal: arcade
 const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let konamiPos = 0;
-document.addEventListener('keydown', e => {
-    konamiPos = (e.key === konami[konamiPos]) ? konamiPos + 1 : (e.key === konami[0] ? 1 : 0);
-    if (konamiPos === konami.length) {
-        konamiPos = 0;
-        const on = document.body.classList.toggle('arcade-mode');
-        showToast(on ? '🕹️ ARCADE MODE — 30 lives granted. Terminal Alien Shooter vibes.' : 'Arcade mode off. Insert coin to continue.');
-        if (on) confettiBurst(60);
+
+function toggleArcadeMode() {
+    const on = root.classList.toggle('arcade-mode');
+    showToast(on ? '🕹️ ARCADE MODE: 30 lives granted. Terminal Alien Shooter vibes.' : 'Arcade mode off. Insert coin to continue.');
+    if (on) confettiBurst(60);
+    return on;
+}
+function konamiInput(key) {
+    konamiPos = (key === konami[konamiPos]) ? konamiPos + 1 : (key === konami[0] ? 1 : 0);
+    if (konamiPos === konami.length) { konamiPos = 0; toggleArcadeMode(); }
+}
+document.addEventListener('keydown', e => konamiInput(e.key.length === 1 ? e.key.toLowerCase() : e.key));
+
+let touchStart = null;
+document.addEventListener('touchstart', e => {
+    const t = e.changedTouches[0];
+    touchStart = { x: t.clientX, y: t.clientY };
+}, { passive: true });
+document.addEventListener('touchend', e => {
+    if (!touchStart || e.target.closest('#terminal')) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
+    touchStart = null;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    if (ax < 12 && ay < 12) {
+        // a tap stands in for B, then A
+        if (konamiPos >= 8) konamiInput(konami[konamiPos]); else konamiPos = 0;
+    } else if (Math.max(ax, ay) > 36) {
+        konamiInput(ax > ay ? (dx > 0 ? 'ArrowRight' : 'ArrowLeft') : (dy > 0 ? 'ArrowDown' : 'ArrowUp'));
     }
-});
+}, { passive: true });
 
 // ─── EASTER EGG 3 · LOGO TRIPLE-CLICK PARTY ─────────────────────
 let logoClicks = 0, logoClickTimer;
@@ -345,12 +398,12 @@ console.log(
     '%cKO.%c\n\nHi, curious one. 👋\n' +
     'You just earned +10 recruiter points for checking the console.\n\n' +
     'Try these on the page:\n' +
-    '  · press `  → terminal\n' +
+    '  · press `  → terminal (or tap >_ on a phone)\n' +
     '  · type "nestle"  → have a break\n' +
-    '  · ↑↑↓↓←→←→BA  → arcade mode\n' +
+    '  · ↑↑↓↓←→←→BA  → arcade mode (on a phone: swipe it, then tap twice)\n' +
     '  · triple-click the logo  → party\n\n' +
     'Let\'s talk: karlandreiordinario@gmail.com',
-    'font-family:monospace; font-size:28px; font-weight:bold; color:#FF5C28;',
+    'font-family:monospace; font-size:28px; font-weight:bold; color:#FF6A3A;',
     'font-family:monospace; font-size:12px; color:#9C9A94;'
 );
 
@@ -360,66 +413,102 @@ const terminalFab = document.getElementById('terminalFab');
 const termInput = document.getElementById('term-input');
 const termOutput = document.getElementById('term-output');
 const termBody = document.getElementById('term-body');
+const RESUME_URL = 'https://drive.google.com/file/d/1dZ0CmoyXoGHk6X1qpaLQZpOAXuYhPi4H/view?usp=drive_link';
 
+function terminalIsOpen() { return !terminal.classList.contains('terminal-hidden'); }
 function toggleTerminal() {
-    terminal.classList.toggle('terminal-hidden');
-    const open = !terminal.classList.contains('terminal-hidden');
-    terminalFab.style.opacity = open ? '0' : '1';
-    terminalFab.style.pointerEvents = open ? 'none' : 'auto';
-    if (open) setTimeout(() => termInput.focus(), 120);
+    const open = terminal.classList.toggle('terminal-hidden') === false;
+    terminalFab.setAttribute('aria-expanded', String(open));
+    if (open) {
+        terminal.removeAttribute('inert');
+        setTimeout(() => termInput.focus(), 120);
+    } else {
+        terminal.setAttribute('inert', '');
+        if (!terminalFab.closest('[inert]') && !terminalFab.hasAttribute('inert')) terminalFab.focus();
+    }
 }
+terminalFab.addEventListener('click', toggleTerminal);
+document.getElementById('terminalClose').addEventListener('click', toggleTerminal);
+termBody.addEventListener('click', e => { if (!e.target.closest('a') && !window.getSelection().toString()) termInput.focus(); });
 
 document.addEventListener('keydown', e => {
-    if (e.key === '`' && e.target.tagName !== 'INPUT') { e.preventDefault(); toggleTerminal(); }
-    if (e.key === 'Escape' && !terminal.classList.contains('terminal-hidden')) toggleTerminal();
+    if (e.key === '`' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); toggleTerminal(); return; }
+    if (e.key !== 'Escape') return;
+    if (breakModeActive) endBreakMode();
+    else if (terminalIsOpen()) toggleTerminal();
+    else closeMobileMenu(true);
 });
 
 termInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { const v = this.value.trim().toLowerCase(); if (v) processCommand(v); this.value = ''; }
 });
 
+// Prices the same call as the hero chart, with more paths, straight in the terminal.
+function terminalSimulation() {
+    const n = 50000;
+    const disc = Math.exp(-sim.R * sim.T);
+    const drift = (sim.R - sim.SIGMA * sim.SIGMA / 2) * sim.T, vol = sim.SIGMA * Math.sqrt(sim.T);
+    let sum = 0, sumSq = 0;
+    for (let i = 0; i < n; i++) {
+        const payoff = disc * Math.max(sim.S0 * Math.exp(drift + vol * sim.randn()) - sim.K, 0);
+        sum += payoff; sumSq += payoff * payoff;
+    }
+    const mean = sum / n, half = 1.96 * Math.sqrt((sumSq - n * mean * mean) / (n - 1) / n);
+    const bs = sim.blackScholesCall();
+    const inside = Math.abs(mean - bs) <= half;
+    return `Simulating 50,000 paths... done.<br>Monte Carlo: <span class="term-white">${mean.toFixed(4)} ± ${half.toFixed(4)}</span><br>Black–Scholes: <span class="term-white">${bs.toFixed(4)}</span><br>` +
+        (inside ? `<span class="term-ok">✓ inside the 95% interval.</span> mcquant does this for 13 benchmarks.` : `Outside the 95% interval. That's the 1-in-20. Run it again.`);
+}
+
 function processCommand(cmd) {
     const line = document.createElement('div');
-    line.innerHTML = `<span class="prompt">ko@portfolio:~$</span> <span class="term-white">${cmd.replace(/</g, '&lt;')}</span>`;
+    const prompt = document.createElement('span');
+    prompt.className = 'prompt'; prompt.textContent = 'ko@portfolio:~$';
+    const echoed = document.createElement('span');
+    echoed.className = 'term-white'; echoed.textContent = ' ' + cmd;
+    line.append(prompt, echoed);
     termOutput.appendChild(line);
 
     const response = document.createElement('div');
-    response.style.marginBottom = '12px';
-    response.style.color = 'var(--muted)';
+    response.className = 'term-response';
+    const safeCmd = cmd.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
     const commands = {
-        'help': `Available commands:<br>&nbsp;· <span class="term-white">about</span> &nbsp;&nbsp;&nbsp;— who I am<br>&nbsp;· <span class="term-white">stack</span> &nbsp;&nbsp;&nbsp;— tech stack<br>&nbsp;· <span class="term-white">projects</span> — my work<br>&nbsp;· <span class="term-white">internship</span> — current role<br>&nbsp;· <span class="term-white">contact</span> &nbsp;&nbsp;— reach me<br>&nbsp;· <span class="term-white">github</span> &nbsp;&nbsp;&nbsp;— open GitHub<br>&nbsp;· <span class="term-white">hire</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— why me<br>&nbsp;· <span class="term-white">clear</span> &nbsp;&nbsp;&nbsp;— clear terminal<br>&nbsp;· <span class="term-white">exit</span> &nbsp;&nbsp;&nbsp;&nbsp;— close terminal<br><span style="color:var(--faint)">...and a few undocumented ones. Explore.</span>`,
-        'about': `Karl Andrei Ordinario. 4th year CS @ DLSU Manila.<br>Data analyst · Software engineer · ML practitioner.<br>Shopper Insights Analytics Intern @ Nestlé PH (thru Aug '26).<br>Graduating February 2027. Open to what's next.`,
-        'stack': `Languages: Python · Java · C · JavaScript · SQL · Go<br>Data: Power BI · Advanced Excel · Pandas · NumPy · scikit-learn<br>Web: React · Express · Next.js · HTML/CSS<br>Backend: Spring Boot · Supabase · MongoDB · MySQL`,
-        'projects': `10 projects built. Highlights:<br>&nbsp;· Steam Analytics Dashboard (SQL, Supabase, OLAP)<br>&nbsp;· Smart Inventory System (Spring Boot, ACID, FEFO)<br>&nbsp;· Income Classification ML (KNN, 84% accuracy)<br>&nbsp;· The Watchmen Discord Bot (Python, automation)<br>&nbsp;· Legal Contract Chatbot (Python, Qdrant, LLMs — in dev)<br><span class="term-hl">Scroll up to see all 10 ↑</span>`,
-        'internship': `Nestlé Philippines — Shopper Insights Analytics Intern<br>Apr 2026 – Aug 2026<br>Synthesizing Kantar/Nielsen/PSA data into commercial<br>insights for one of the world's largest FMCG companies.<br>Leading the team's migration from Excel to Power BI.<br>Open to what's next starting September 2026.`,
-        'contact': `Email: <a href="mailto:karlandreiordinario@gmail.com" style="color:var(--mint)">karlandreiordinario@gmail.com</a><br>LinkedIn: <a href="https://linkedin.com/in/karlordinario" target="_blank" style="color:var(--honey)">linkedin.com/in/karlordinario</a><br>GitHub: <a href="https://github.com/karlOrdinario" target="_blank" style="color:var(--honey)">github.com/karlOrdinario</a>`,
-        'hire': `Reasons to hire Karl:<br>&nbsp;1. Turns messy multi-source data into decisions (proven at Nestlé)<br>&nbsp;2. Ships full-stack — Spring Boot to React to SQL<br>&nbsp;3. Led 6 org roles: partnerships, ₱300K+ sponsorships, teams<br>&nbsp;4. Learns fast, owns outcomes, shows up<br><span class="term-hl">→ karlandreiordinario@gmail.com</span>`,
+        'help': `Available commands:<br>&nbsp;· <span class="term-white">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;who I am<br>&nbsp;· <span class="term-white">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tech stack<br>&nbsp;· <span class="term-white">projects</span> &nbsp;&nbsp;my work<br>&nbsp;· <span class="term-white">internship</span> Nestlé PH<br>&nbsp;· <span class="term-white">simulate</span> &nbsp;&nbsp;price an option, live<br>&nbsp;· <span class="term-white">contact</span> &nbsp;&nbsp;&nbsp;reach me<br>&nbsp;· <span class="term-white">resume</span> &nbsp;&nbsp;&nbsp;&nbsp;open my resume<br>&nbsp;· <span class="term-white">github</span> &nbsp;&nbsp;&nbsp;&nbsp;open GitHub<br>&nbsp;· <span class="term-white">hire</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;why me<br>&nbsp;· <span class="term-white">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear terminal<br>&nbsp;· <span class="term-white">exit</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close terminal<br><span class="term-dim">...and a few undocumented ones. Explore.</span>`,
+        'about': `Karl Andrei Ordinario. Final-year CS @ DLSU, Dean's List.<br>Data analyst · software engineer · quant finance builder.<br>Shopper Insights Analytics Intern @ Nestlé PH (Apr–Aug 2026).<br>Graduating February 2027. Open to what's next.`,
+        'stack': `Analytics: Power BI (DAX) · Power Query · Advanced Excel · SQL<br>Languages: Python · Java · JavaScript · TypeScript · Go · C<br>Quant: NumPy · SciPy · hmmlearn · PyPortfolioOpt · Streamlit<br>AI: RAG · Gemini · LangChain · Qdrant · RAGAS<br>Cloud: AWS (VPC, EC2, ALB, Auto Scaling, CloudWatch)<br>Web: React · Next.js · Express · Spring Boot · PostgreSQL`,
+        'projects': `Highlights:<br>&nbsp;· mcquant: Monte Carlo pricing, risk &amp; valuation (299 tests)<br>&nbsp;· Regime-switching portfolio model (HMM, halved drawdown)<br>&nbsp;· Online Availability Checker (28s → 2.6s per listing)<br>&nbsp;· PhilLexBot: legal contract RAG chatbot (thesis)<br>&nbsp;· Neon Pulse: auto-scaling AWS architecture<br>&nbsp;· Smart Inventory System (Spring Boot, FEFO, ACID)<br><span class="term-hl">Scroll to Work for all 16 ↑</span>`,
+        'internship': `Nestlé Philippines · Shopper Insights Analytics Intern<br>Apr 2026 – Aug 2026<br>Built a national pricing business case, presented to 7 sales<br>and brand teams, and prototyped a Power BI model that cut<br>30-minute filters down to seconds.<br>Also built the OLA Checker for another department, unprompted.`,
+        'contact': `Email: <a href="mailto:karlandreiordinario@gmail.com">karlandreiordinario@gmail.com</a><br>LinkedIn: <a href="https://linkedin.com/in/karlordinario" target="_blank" rel="noopener">linkedin.com/in/karlordinario</a><br>GitHub: <a href="https://github.com/karlOrdinario" target="_blank" rel="noopener">github.com/karlOrdinario</a>`,
+        'hire': `Reasons to hire Karl:<br>&nbsp;1. Turns messy market data into decisions (proven at Nestlé)<br>&nbsp;2. Builds tools that check their own math (see: mcquant)<br>&nbsp;3. Ships: Python, SQL, Spring Boot, AWS, Power BI<br>&nbsp;4. Pitched 50+ companies, closed ₱300K+ in sponsorships<br>&nbsp;5. Learns fast, owns outcomes, shows up<br><span class="term-hl">→ karlandreiordinario@gmail.com</span>`,
         'sudo': `Nice try. This incident will be reported. 📋`,
         'sudo hire karl': `Permission granted. ✅ Drafting offer letter...`,
-        'ls': `about/&nbsp;&nbsp; skills/&nbsp;&nbsp; projects/&nbsp;&nbsp; experience/&nbsp;&nbsp; contact/&nbsp;&nbsp; <span style="color:var(--faint)">.secrets/</span>`,
-        'ls .secrets': `nestle.egg&nbsp;&nbsp; konami.egg&nbsp;&nbsp; party.egg&nbsp;&nbsp; <span style="color:var(--faint)">try harder ;)</span>`,
-        'whoami': `karl — data analyst, software engineer, org leader.`,
+        'ls': `work/&nbsp;&nbsp; experience/&nbsp;&nbsp; skills/&nbsp;&nbsp; about/&nbsp;&nbsp; contact/&nbsp;&nbsp; <span class="term-dim">.secrets/</span>`,
+        'ls .secrets': `nestle.egg&nbsp;&nbsp; konami.egg&nbsp;&nbsp; arcade.egg&nbsp;&nbsp; party.egg&nbsp;&nbsp; <span class="term-dim">try harder ;)</span>`,
+        'whoami': `karl: data analyst, software engineer, org leader.`,
         'pwd': `/home/karl/portfolio`,
         'date': new Date().toDateString(),
         'hi': `Hello! Type <span class="term-white">'help'</span> to get started.`,
         'hello': `Hey! Type <span class="term-white">'help'</span> to get started.`,
         'coffee': `☕ Brewing... [████████████] 100%<br>Fun fact: I ran on Nescafé for an entire internship.`,
         'milo': `🥛 MILO® energy detected. Champion mode enabled.`,
-        'kitkat': `Have a break... you know the rest. Try typing <span class="term-white">nestle</span> outside the terminal.`,
-        'vim': `You're now stuck in vim. Just kidding — but imagine.`,
+        'kitkat': `Have a break... you know the rest. Try typing <span class="term-white">nestle</span>.`,
+        'vim': `You're now stuck in vim. Just kidding, but imagine.`,
         'rm -rf /': `Wow. On my own portfolio? Rude. ❌ Permission denied.`,
         '42': `The answer to life, the universe, and everything. Correct.`,
     };
 
     if (cmd === 'clear') { termOutput.innerHTML = ''; return; }
     else if (cmd === 'exit') { toggleTerminal(); return; }
-    else if (cmd === 'github') { window.open('https://github.com/karlOrdinario', '_blank'); response.innerHTML = `Opening GitHub... <span style="color:var(--mint)">✓</span>`; }
-    else if (cmd === 'nestle' || cmd === 'nestlé') { response.innerHTML = `🍫 Unwrapping...`; setTimeout(startBreakMode, 500); }
+    else if (cmd === 'github') { window.open('https://github.com/karlOrdinario', '_blank', 'noopener'); response.innerHTML = `Opening GitHub... <span class="term-ok">✓</span>`; }
+    else if (cmd === 'resume' || cmd === 'cv') { window.open(RESUME_URL, '_blank', 'noopener'); response.innerHTML = `Opening resume... <span class="term-ok">✓</span>`; }
+    else if (cmd === 'simulate' || cmd === 'mc' || cmd === 'mcquant') { response.innerHTML = terminalSimulation(); }
+    else if (cmd === 'nestle' || cmd === 'nestlé') { response.innerHTML = `🍫 Unwrapping...`; setTimeout(() => { if (terminalIsOpen()) toggleTerminal(); startBreakMode(); }, 500); }
     else if (cmd === 'party') { confettiBurst(110); response.innerHTML = `🎉 Party protocol initiated.`; }
-    else if (cmd === 'matrix') { response.innerHTML = `Wake up, recruiter... follow the white rabbit. 🐇`; document.body.classList.add('arcade-mode'); setTimeout(() => document.body.classList.remove('arcade-mode'), 5000); }
+    else if (cmd === 'arcade' || cmd === 'konami') { response.innerHTML = toggleArcadeMode() ? `🕹️ Arcade mode on. Run it again to switch it off.` : `Arcade mode off.`; }
+    else if (cmd === 'matrix') { response.innerHTML = `Wake up, recruiter... follow the white rabbit. 🐇`; root.classList.add('arcade-mode'); setTimeout(() => root.classList.remove('arcade-mode'), 5000); }
     else if (commands[cmd]) { response.innerHTML = commands[cmd]; }
-    else { response.innerHTML = `<span style="color:#ff6b6b">Command not found:</span> ${cmd.replace(/</g, '&lt;')}. Type <span class="term-white">'help'</span> for options.`; }
+    else { response.innerHTML = `<span class="term-err">Command not found:</span> ${safeCmd}. Type <span class="term-white">'help'</span> for options.`; }
 
     termOutput.appendChild(response);
     termBody.scrollTop = termBody.scrollHeight;
