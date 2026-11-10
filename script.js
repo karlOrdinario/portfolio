@@ -19,22 +19,101 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
     el.textContent = `${day} ${base}`;
 })();
 
-// ─── THEME TOGGLE ───────────────────────────────────────────────
+// ─── THEME ──────────────────────────────────────────────────────
+// Default: light from 06:00 to 18:00 by the visitor's clock, dark otherwise.
+// A manual choice wins for the rest of the visit.
 const themeToggle = document.getElementById('themeToggle');
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+const themeByClock = () => { const h = new Date().getHours(); return (h >= 6 && h < 18) ? 'light' : 'dark'; };
+const currentTheme = () => root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+let themeChosenByVisitor = false;
+try { themeChosenByVisitor = ['light', 'dark'].includes(sessionStorage.getItem('ko-theme')); } catch (e) {}
 
 function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
     themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-    if (themeColorMeta) themeColorMeta.setAttribute('content', theme === 'dark' ? '#0F1113' : '#F8F8F6');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', theme === 'dark' ? '#0F1113' : '#F5F3EC');
 }
-applyTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+applyTheme(currentTheme());
+
+// Animated switch: the new theme opens as a circle from the toggle, like a sunrise or sunset.
+function switchTheme(next) {
+    if (next === currentTheme()) return;
+    themeToggle.classList.add('is-turning');
+    setTimeout(() => themeToggle.classList.remove('is-turning'), 700);
+
+    if (prefersReducedMotion) { applyTheme(next); return; }
+    if (!document.startViewTransition) {
+        root.classList.add('theme-fade');
+        applyTheme(next);
+        setTimeout(() => root.classList.remove('theme-fade'), 500);
+        return;
+    }
+    const r = themeToggle.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.ready.then(() => {
+        root.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+            { duration: 700, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+        );
+    }).catch(() => {});
+}
 
 themeToggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    try { localStorage.setItem('ko-theme', next); } catch (e) { /* private mode: theme just won't persist */ }
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    themeChosenByVisitor = true;
+    try { sessionStorage.setItem('ko-theme', next); } catch (e) { /* private mode: the choice just won't persist */ }
+    switchTheme(next);
 });
+
+// If the page stays open across sunrise or sunset, follow the clock (unless the visitor chose).
+setInterval(() => { if (!themeChosenByVisitor && !document.hidden) switchTheme(themeByClock()); }, 60000);
+
+// ─── BACKDROP · TERRAIN CONTOURS ────────────────────────────────
+// Drawn once per width. Rings are coloured by height: green at the foot,
+// through teal, to blue at the summit — the same sweep as the accent gradient.
+(function contours() {
+    const svg = document.getElementById('contours');
+    if (!svg) return;
+    const NS = 'http://www.w3.org/2000/svg';
+    let drawnWidth = 0;
+
+    function draw() {
+        const W = window.innerWidth, H = window.innerHeight;
+        if (Math.abs(W - drawnWidth) < 40) return;   // ignore mobile address-bar resizes
+        drawnWidth = W;
+        let seed = 11;
+        const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+        const unit = Math.max(22, Math.min(W, H) / 26);
+        const hills = [[W * 0.86, H * 0.14, 15], [W * 0.10, H * 0.88, 13], [W * 0.52, H * 1.10, 9]];
+        const lerp = (a, b, t) => Math.round(a + (b - a) * t);
+        let out = '';
+        hills.forEach(([cx, cy, rings]) => {
+            const ph = [rnd() * 6, rnd() * 6, rnd() * 6];
+            for (let k = 1; k <= rings; k++) {
+                const r = k * unit;
+                let d = '';
+                for (let a = 0; a <= 360; a += 5) {
+                    const t = a * Math.PI / 180;
+                    const rr = r * (1 + 0.16 * Math.sin(3 * t + ph[0]) + 0.10 * Math.sin(5 * t + ph[1] + k * 0.25) + 0.06 * Math.sin(2 * t + ph[2]));
+                    d += (a ? 'L' : 'M') + (cx + rr * Math.cos(t)).toFixed(1) + ' ' + (cy + rr * Math.sin(t) * 0.82).toFixed(1);
+                }
+                const u = 1 - k / rings;   // 0 at the foot, 1 at the summit
+                const c = u < 0.5
+                    ? [lerp(4, 14, u * 2), lerp(120, 116, u * 2), lerp(87, 144, u * 2)]
+                    : [lerp(14, 29, (u - 0.5) * 2), lerp(116, 78, (u - 0.5) * 2), lerp(144, 216, (u - 0.5) * 2)];
+                const major = k % 4 === 0;
+                out += `<path d="${d}Z" fill="none" stroke="rgb(${c})" stroke-width="${major ? 1.4 : 0.9}" stroke-opacity="${major ? 0.36 : 0.2}"/>`;
+            }
+        });
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.innerHTML = out;
+    }
+    draw();
+    window.addEventListener('resize', draw);
+})();
 
 // ─── NAV ACTIVE STATE ───────────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav a');
@@ -74,6 +153,96 @@ function closeMobileMenu(returnFocus) {
 menuToggle.addEventListener('click', () => mobileMenu.hidden ? openMobileMenu() : closeMobileMenu(true));
 mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMobileMenu(false)));
 window.matchMedia('(min-width: 860px)').addEventListener('change', e => { if (e.matches) closeMobileMenu(false); });
+
+// ─── SCROLL PROGRESS ────────────────────────────────────────────
+const scrollProgress = document.getElementById('scrollProgress');
+function updateScrollProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+}
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+window.addEventListener('resize', updateScrollProgress);
+updateScrollProgress();
+
+// ─── PROJECT CAROUSELS ──────────────────────────────────────────
+// On wide screens the track is a plain grid and none of this is visible.
+// On phones it becomes a swipeable, scroll-snapping row with buttons.
+const carousels = [...document.querySelectorAll('[data-carousel]')].map(el => {
+    const track = el.querySelector('.carousel-track');
+    const prev = el.querySelector('[data-prev]'), next = el.querySelector('[data-next]');
+    const dots = el.querySelector('[data-dots]'), count = el.querySelector('[data-count]');
+    let index = 0, ticking = false;
+
+    const slides = () => [...track.querySelectorAll('[data-slide]')].filter(c => !c.hidden);
+    const scrollable = () => track.scrollWidth > track.clientWidth + 4;
+    const offsetOf = slide => slide.offsetLeft - track.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft || 0);
+
+    function render() {
+        const list = slides();
+        index = Math.min(index, Math.max(0, list.length - 1));
+        dots.innerHTML = list.map((_, i) => `<i${i === index ? ' class="is-on"' : ''}></i>`).join('');
+        count.textContent = list.length ? `${index + 1} of ${list.length}` : '';
+        prev.disabled = index === 0;
+        next.disabled = index >= list.length - 1;
+        // only a scrolling track needs to be a keyboard stop
+        if (scrollable()) track.setAttribute('tabindex', '0'); else track.removeAttribute('tabindex');
+    }
+    function sync() {
+        ticking = false;
+        const list = slides();
+        if (!list.length) return;
+        let best = 0, bestDist = Infinity;
+        list.forEach((slide, i) => {
+            const d = Math.abs(offsetOf(slide) - track.scrollLeft);
+            if (d < bestDist) { bestDist = d; best = i; }
+        });
+        // the last card can never reach the left edge, so treat the scroll end as "last"
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) best = list.length - 1;
+        if (best !== index) { index = best; render(); }
+    }
+    function go(step) {
+        const list = slides();
+        const target = list[Math.max(0, Math.min(list.length - 1, index + step))];
+        if (target) track.scrollTo({ left: offsetOf(target), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    }
+    track.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(sync); } }, { passive: true });
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    window.addEventListener('resize', render);
+    render();
+    return { el, track, reset() { index = 0; track.scrollLeft = 0; render(); } };
+});
+
+// Evidence panels: always open on wide screens, tucked behind a tap on phones
+// so each carousel card stays about one screen tall.
+(function evidencePanels() {
+    const panels = document.querySelectorAll('.evidence-wrap');
+    const phone = window.matchMedia('(max-width: 759px)');
+    const apply = () => panels.forEach(d => { d.open = !phone.matches; });
+    phone.addEventListener('change', apply);
+    apply();
+})();
+
+// ─── PROJECT FILTERS ────────────────────────────────────────────
+(function projectFilters() {
+    const buttons = document.querySelectorAll('.chip-btn[data-filter]');
+    const cards = document.querySelectorAll('.pcard[data-cat]');
+    const status = document.getElementById('filterStatus');
+    const moreCarousel = carousels.find(c => c.el.classList.contains('carousel-more'));
+
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+        let shown = 0;
+        cards.forEach(card => {
+            const match = filter === 'all' || card.dataset.cat === filter;
+            card.hidden = !match;
+            if (match) shown++;
+        });
+        status.textContent = `Showing ${shown} project${shown === 1 ? '' : 's'}: ${btn.textContent.trim()}.`;
+        if (moreCarousel) moreCarousel.reset();
+    }));
+})();
 
 // ─── HERO · LIVE MONTE CARLO ────────────────────────────────────
 // Simulates geometric Brownian motion paths, prices a European call from
@@ -191,7 +360,7 @@ const sim = (function heroSim() {
         }
 
         // median
-        ctx.globalAlpha = 1; ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+        ctx.globalAlpha = 1; ctx.strokeStyle = accent; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
         ctx.beginPath();
         ctx.moveTo(x(0), y(p50[0]));
         for (let j = 1; j <= last; j++) ctx.lineTo(x(j), y(p50[j]));
@@ -288,7 +457,7 @@ function rainEmoji(emojis, count = 34) {
 function confettiBurst(count = 80) {
     if (prefersReducedMotion) return;
     const layer = document.getElementById('confettiLayer');
-    const colors = ['#FF6A3A', '#FFC978', '#3ECF8E', '#F4F1EA', '#D31145'];
+    const colors = ['#34D399', '#FFFFFF', '#60A5FA', '#0E7490', '#D31145'];
     for (let i = 0; i < count; i++) {
         const bit = document.createElement('div');
         bit.className = 'confetti-bit';
@@ -403,7 +572,7 @@ console.log(
     '  · ↑↑↓↓←→←→BA  → arcade mode (on a phone: swipe it, then tap twice)\n' +
     '  · triple-click the logo  → party\n\n' +
     'Let\'s talk: karlandreiordinario@gmail.com',
-    'font-family:monospace; font-size:28px; font-weight:bold; color:#FF6A3A;',
+    'font-family:monospace; font-size:28px; font-weight:bold; color:#34D399;',
     'font-family:monospace; font-size:12px; color:#9C9A94;'
 );
 
@@ -474,8 +643,8 @@ function processCommand(cmd) {
     const safeCmd = cmd.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
     const commands = {
-        'help': `Available commands:<br>&nbsp;· <span class="term-white">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;who I am<br>&nbsp;· <span class="term-white">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tech stack<br>&nbsp;· <span class="term-white">projects</span> &nbsp;&nbsp;my work<br>&nbsp;· <span class="term-white">internship</span> Nestlé PH<br>&nbsp;· <span class="term-white">simulate</span> &nbsp;&nbsp;price an option, live<br>&nbsp;· <span class="term-white">contact</span> &nbsp;&nbsp;&nbsp;reach me<br>&nbsp;· <span class="term-white">resume</span> &nbsp;&nbsp;&nbsp;&nbsp;open my resume<br>&nbsp;· <span class="term-white">github</span> &nbsp;&nbsp;&nbsp;&nbsp;open GitHub<br>&nbsp;· <span class="term-white">hire</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;why me<br>&nbsp;· <span class="term-white">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear terminal<br>&nbsp;· <span class="term-white">exit</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close terminal<br><span class="term-dim">...and a few undocumented ones. Explore.</span>`,
-        'about': `Karl Andrei Ordinario. Final-year CS @ DLSU, Dean's List.<br>Data analyst · software engineer · quant finance builder.<br>Shopper Insights Analytics Intern @ Nestlé PH (Apr–Aug 2026).<br>Graduating February 2027. Open to what's next.`,
+        'help': `Available commands:<br>&nbsp;· <span class="term-white">about</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;who I am<br>&nbsp;· <span class="term-white">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tech stack<br>&nbsp;· <span class="term-white">projects</span> &nbsp;&nbsp;my work<br>&nbsp;· <span class="term-white">internship</span> Nestlé PH<br>&nbsp;· <span class="term-white">simulate</span> &nbsp;&nbsp;price an option, live<br>&nbsp;· <span class="term-white">contact</span> &nbsp;&nbsp;&nbsp;reach me<br>&nbsp;· <span class="term-white">resume</span> &nbsp;&nbsp;&nbsp;&nbsp;open my resume<br>&nbsp;· <span class="term-white">github</span> &nbsp;&nbsp;&nbsp;&nbsp;open GitHub<br>&nbsp;· <span class="term-white">hire</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;why me<br>&nbsp;· <span class="term-white">nestle</span> &nbsp;&nbsp;&nbsp;&nbsp;have a break 🍫<br>&nbsp;· <span class="term-white">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear terminal<br>&nbsp;· <span class="term-white">exit</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close terminal<br><span class="term-dim">...and a few undocumented ones. Explore.</span>`,
+        'about': `Karl Andrei Ordinario. Final-year CS @ DLSU Manila.<br>Data analyst · software engineer · quant finance builder.<br>Shopper Insights Analytics Intern @ Nestlé PH (Apr–Aug 2026).<br>Graduating February 2027. Open to what's next.`,
         'stack': `Analytics: Power BI (DAX) · Power Query · Advanced Excel · SQL<br>Languages: Python · Java · JavaScript · TypeScript · Go · C<br>Quant: NumPy · SciPy · hmmlearn · PyPortfolioOpt · Streamlit<br>AI: RAG · Gemini · LangChain · Qdrant · RAGAS<br>Cloud: AWS (VPC, EC2, ALB, Auto Scaling, CloudWatch)<br>Web: React · Next.js · Express · Spring Boot · PostgreSQL`,
         'projects': `Highlights:<br>&nbsp;· mcquant: Monte Carlo pricing, risk &amp; valuation (299 tests)<br>&nbsp;· Regime-switching portfolio model (HMM, halved drawdown)<br>&nbsp;· Online Availability Checker (28s → 2.6s per listing)<br>&nbsp;· PhilLexBot: legal contract RAG chatbot (thesis)<br>&nbsp;· Neon Pulse: auto-scaling AWS architecture<br>&nbsp;· Smart Inventory System (Spring Boot, FEFO, ACID)<br><span class="term-hl">Scroll to Work for all 16 ↑</span>`,
         'internship': `Nestlé Philippines · Shopper Insights Analytics Intern<br>Apr 2026 – Aug 2026<br>Built a national pricing business case, presented to 7 sales<br>and brand teams, and prototyped a Power BI model that cut<br>30-minute filters down to seconds.<br>Also built the OLA Checker for another department, unprompted.`,
@@ -483,7 +652,7 @@ function processCommand(cmd) {
         'hire': `Reasons to hire Karl:<br>&nbsp;1. Turns messy market data into decisions (proven at Nestlé)<br>&nbsp;2. Builds tools that check their own math (see: mcquant)<br>&nbsp;3. Ships: Python, SQL, Spring Boot, AWS, Power BI<br>&nbsp;4. Pitched 50+ companies, closed ₱300K+ in sponsorships<br>&nbsp;5. Learns fast, owns outcomes, shows up<br><span class="term-hl">→ karlandreiordinario@gmail.com</span>`,
         'sudo': `Nice try. This incident will be reported. 📋`,
         'sudo hire karl': `Permission granted. ✅ Drafting offer letter...`,
-        'ls': `work/&nbsp;&nbsp; experience/&nbsp;&nbsp; skills/&nbsp;&nbsp; about/&nbsp;&nbsp; contact/&nbsp;&nbsp; <span class="term-dim">.secrets/</span>`,
+        'ls': `experience/&nbsp;&nbsp; work/&nbsp;&nbsp; skills/&nbsp;&nbsp; about/&nbsp;&nbsp; contact/&nbsp;&nbsp; <span class="term-dim">.secrets/</span>`,
         'ls .secrets': `nestle.egg&nbsp;&nbsp; konami.egg&nbsp;&nbsp; arcade.egg&nbsp;&nbsp; party.egg&nbsp;&nbsp; <span class="term-dim">try harder ;)</span>`,
         'whoami': `karl: data analyst, software engineer, org leader.`,
         'pwd': `/home/karl/portfolio`,
